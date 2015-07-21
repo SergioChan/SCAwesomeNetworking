@@ -7,6 +7,7 @@
 //
 
 #import "AFHTTPRequestOperation.h"
+#import "ANHeader.h"
 
 @interface ANOperation : AFHTTPRequestOperation
 

@@ -9,5 +9,5 @@
 #ifndef awesome_networking_ANHeader_h
 #define awesome_networking_ANHeader_h
 
-
+#define RequestsKey @"Requests"
 #endif

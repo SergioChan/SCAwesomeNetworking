@@ -7,7 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ANHeader.h"
+#import "ANRequest.h"
+#import "AFHTTPRequestOperationManager.h"
+#import "AFNetworkActivityIndicatorManager.h"
 
-@interface ANManager : NSObject
+typedef void (^successBlock)(void);
+typedef void (^failErrorBlock)(NSError *error);
+
+@interface ANManager : AFHTTPRequestOperationManager
 
 @end
