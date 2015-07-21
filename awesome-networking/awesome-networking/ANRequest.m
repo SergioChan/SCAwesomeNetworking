@@ -11,13 +11,13 @@
 @implementation ANRequest
 
 @synthesize operation;
-@synthesize operationId;
+@synthesize requestId;
 @synthesize category;
 @synthesize tag;
 @synthesize context;
 
 -(void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:[NSNumber numberWithInteger:operationId] forKey:@"id"];
+    [aCoder encodeObject:[NSNumber numberWithInteger:requestId] forKey:@"id"];
     [aCoder encodeObject:[NSNumber numberWithInteger:category] forKey:@"category"];
     [aCoder encodeObject:[NSNumber numberWithInteger:tag] forKey:@"tag"];
     [aCoder encodeObject:operation forKey:@"operation"];
@@ -26,7 +26,7 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
-        operationId = [[aDecoder decodeObjectForKey:@"id"] integerValue];
+        requestId = [[aDecoder decodeObjectForKey:@"id"] integerValue];
         operation = [aDecoder decodeObjectForKey:@"operation"];
         category = [[aDecoder decodeObjectForKey:@"category"] integerValue];
         tag = [[aDecoder decodeObjectForKey:@"tag"] integerValue];

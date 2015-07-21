@@ -9,6 +9,7 @@
 #import "ANManager.h"
 
 @implementation ANManager
+
 + (ANManager *) sharedInstance
 {
     static dispatch_once_t  onceToken;
@@ -18,6 +19,7 @@
         sharedInstance.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"text/json", @"text/plain",@"text/xml",@"application/rss+xml", @"application/json", nil];
         sharedInstance.requestSerializer = [AFHTTPRequestSerializer serializer];
         sharedInstance.requestSerializer.timeoutInterval=10.0f;
+        sharedInstance.operationQueue = [ANOperationQueue sharedInstance];
         [AFNetworkActivityIndicatorManager sharedManager].enabled=YES;
         sharedInstance.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithObjects:@"GET", @"HEAD",nil];
         sharedInstance.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
@@ -26,6 +28,11 @@
     return sharedInstance;
 }
 
+/**
+ *  恢复指定分类下的缓存请求
+ *
+ *  @param categories 指定分类的集合
+ */
 - (void)resumeCachedRequestWithCategory:(NSArray *)categories
 {
     NSMutableArray *dataArray = [[ANManager sharedInstance] getNeedResendRequests:categories];
@@ -41,6 +48,14 @@
     }
 }
 
+/**
+ *  缓存指定请求到指定分类下
+ *
+ *  @param request  请求
+ *  @param category 分类
+ *
+ *  @return 请求的唯一标识
+ */
 - (NSInteger) cacheRequest:(ANRequest *) request category:(int) category
 {
     //先读取原来的请求
@@ -194,4 +209,6 @@
     
     return resendRequests;
 }
+
+- ()
 @end

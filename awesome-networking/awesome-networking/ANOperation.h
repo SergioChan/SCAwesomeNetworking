@@ -11,4 +11,14 @@
 
 @interface ANOperation : AFHTTPRequestOperation
 
+/**
+ *  主键标识
+ */
+@property(nonatomic, assign) NSInteger operationId;
+
+/**
+ *  时间戳
+ */
+@property(nonatomic, strong) NSString *timestamp;
+
 @end

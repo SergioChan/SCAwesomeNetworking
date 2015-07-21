@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "ANHeader.h"
 #import "ANRequest.h"
+#import "ANOperationQueue.h"
+
 #import "AFHTTPRequestOperationManager.h"
 #import "AFNetworkActivityIndicatorManager.h"
 
@@ -17,4 +19,5 @@ typedef void (^failErrorBlock)(NSError *error);
 
 @interface ANManager : AFHTTPRequestOperationManager
 
++ (ANManager *) sharedInstance;
 @end

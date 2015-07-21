@@ -12,7 +12,7 @@
 
 @interface ANRequest : NSObject
 {
-    NSInteger operationId;
+    NSInteger requestId;
     NSInteger category;
     NSInteger tag;
     AFHTTPRequestOperation *operation;
@@ -22,7 +22,7 @@
 /**
  *  主键标识
  */
-@property(nonatomic, assign) NSInteger operationId;
+@property(nonatomic, assign) NSInteger requestId;
 
 /**
  *  分类

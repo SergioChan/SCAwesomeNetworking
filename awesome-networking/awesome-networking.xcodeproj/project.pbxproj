@@ -17,6 +17,7 @@
 		229AD8201B5E427B00EDF5FE /* ANManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD81F1B5E427B00EDF5FE /* ANManager.m */; };
 		229AD8231B5E42A800EDF5FE /* ANRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD8221B5E42A800EDF5FE /* ANRequest.m */; };
 		229AD8271B5E430800EDF5FE /* ANOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD8261B5E430800EDF5FE /* ANOperation.m */; };
+		229AD82A1B5E9A0A00EDF5FE /* ANOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD8291B5E9A0A00EDF5FE /* ANOperationQueue.m */; };
 		96BCAC683FFEF88E7932D7DA /* libPods-awesome-networking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B66BC46537D32016A698506B /* libPods-awesome-networking.a */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,8 @@
 		229AD8241B5E42BF00EDF5FE /* ANHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANHeader.h; sourceTree = "<group>"; };
 		229AD8251B5E430800EDF5FE /* ANOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANOperation.h; sourceTree = "<group>"; };
 		229AD8261B5E430800EDF5FE /* ANOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANOperation.m; sourceTree = "<group>"; };
+		229AD8281B5E9A0A00EDF5FE /* ANOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANOperationQueue.h; sourceTree = "<group>"; };
+		229AD8291B5E9A0A00EDF5FE /* ANOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANOperationQueue.m; sourceTree = "<group>"; };
 		B66BC46537D32016A698506B /* libPods-awesome-networking.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-awesome-networking.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -147,6 +150,8 @@
 				229AD8241B5E42BF00EDF5FE /* ANHeader.h */,
 				229AD8251B5E430800EDF5FE /* ANOperation.h */,
 				229AD8261B5E430800EDF5FE /* ANOperation.m */,
+				229AD8281B5E9A0A00EDF5FE /* ANOperationQueue.h */,
+				229AD8291B5E9A0A00EDF5FE /* ANOperationQueue.m */,
 			);
 			name = "awesome-networking";
 			sourceTree = "<group>";
@@ -308,6 +313,7 @@
 				229AD8201B5E427B00EDF5FE /* ANManager.m in Sources */,
 				227DF24C1B5E0BE700DC3D59 /* ViewController.m in Sources */,
 				227DF2491B5E0BE700DC3D59 /* AppDelegate.m in Sources */,
+				229AD82A1B5E9A0A00EDF5FE /* ANOperationQueue.m in Sources */,
 				227DF2461B5E0BE600DC3D59 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
