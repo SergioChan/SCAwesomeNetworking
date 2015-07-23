@@ -21,4 +21,6 @@
  */
 @property(nonatomic, strong) NSString *timestamp;
 
+
+- (instancetype)initWithOperation:(AFHTTPRequestOperation *)op;
 @end

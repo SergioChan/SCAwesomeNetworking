@@ -59,5 +59,39 @@ typedef void (^failErrorBlock)(NSError *error);
  */
 - (NSMutableArray *) getNeedResendRequests:(NSArray *) categories;
 
+/**
+ *
+ *
+ *  @param URLString  <#URLString description#>
+ *  @param category   <#category description#>
+ *  @param context    <#context description#>
+ *  @param tag        <#tag description#>
+ *  @param parameters <#parameters description#>
+ *  @param success    <#success description#>
+ *  @param failure    <#failure description#>
+ *
+ *  @return <#return value description#>
+ */
+- (ANOperation *)POST:(NSString *)URLString
+                        category:(ANCategory)category
+                         context:(NSDictionary *)context
+                             tag:(NSInteger)tag
+                      parameters:(id)parameters
+                         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
+/**
+ *  <#Description#>
+ *
+ *  @param URLString  <#URLString description#>
+ *  @param parameters <#parameters description#>
+ *  @param success    <#success description#>
+ *  @param failure    <#failure description#>
+ *
+ *  @return <#return value description#>
+ */
+- (ANOperation *)POST:(NSString *)URLString
+                      parameters:(id)parameters
+                         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 @end

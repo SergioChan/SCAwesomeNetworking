@@ -33,7 +33,7 @@
 }
 
 - (instancetype)initWithOperation:(ANOperation *)oper
-                      andCategory:(NSInteger)t_category
+                      andCategory:(ANCategory)t_category
 {
     self = [super init];
     if(self)

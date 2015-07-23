@@ -50,5 +50,6 @@
 {
     [super addOperation:req.operation];
     
+    [self.requestSet setObject:req forKey:[NSString stringWithFormat:@"%ld",(long)req.operation.operationId]];
 }
 @end

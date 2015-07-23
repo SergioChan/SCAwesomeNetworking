@@ -44,4 +44,22 @@
     return operation;
 }
 
+- (instancetype)initWithOperation:(AFHTTPRequestOperation *)op
+{
+    if(op)
+    {
+        self = [super init];
+        if (self)
+        {
+            self = [(ANOperation *)op copy];
+            self.operationId = (NSInteger)[[NSDate date] timeIntervalSince1970];
+            self.timestamp = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
+        }
+        return self;
+    }
+    else
+    {
+        return nil;
+    }
+}
 @end

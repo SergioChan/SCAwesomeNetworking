@@ -211,7 +211,10 @@
     return resendRequests;
 }
 
-- (AFHTTPRequestOperation *)POST:(NSString *)URLString
+- (ANOperation *)POST:(NSString *)URLString
+                        category:(ANCategory)category
+                         context:(NSDictionary *)context
+                             tag:(NSInteger)tag
                       parameters:(id)parameters
                          success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                          failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
@@ -230,8 +233,23 @@
     
     operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
     
-    [(ANOperationQueue *)self.operationQueue addRequest:nil];
+    ANRequest *tmp = [[ANRequest alloc]initWithOperation:operation andCategory:category];
+    tmp.context = context;
+    tmp.tag = tag;
+    [(ANOperationQueue *)self.operationQueue addRequest:tmp];
     
     return operation;
+}
+
+- (ANOperation *)POST:(NSString *)URLString
+                      parameters:(id)parameters
+                         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    return [self POST:URLString category:DEFAULT_CATEGORY context:nil tag:0 parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        success(operation,responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(operation,error);
+    }];
 }
 @end

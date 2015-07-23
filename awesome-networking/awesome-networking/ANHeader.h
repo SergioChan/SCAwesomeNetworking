@@ -10,4 +10,10 @@
 #define awesome_networking_ANHeader_h
 
 #define RequestsKey @"Requests"
+
+typedef NS_ENUM(NSInteger,ANCategory){
+    DEFAULT_CATEGORY = 0,
+    TEST_CATEGORY,
+};
+
 #endif

@@ -13,7 +13,7 @@
 
 @interface ANRequest : NSObject
 {
-    NSInteger category;
+    ANCategory category;
     NSInteger tag;
     ANOperation *operation;
     NSDictionary *context;
@@ -22,7 +22,7 @@
 /**
  *  分类
  */
-@property(nonatomic, assign) NSInteger category;
+@property(nonatomic, assign) ANCategory category;
 
 /**
  *  特殊标识
@@ -40,5 +40,5 @@
 @property(nonatomic, strong) NSDictionary *context;
 
 - (instancetype)initWithOperation:(AFHTTPRequestOperation *)oper
-                      andCategory:(NSInteger)category;
+                      andCategory:(ANCategory)category;
 @end
