@@ -41,7 +41,7 @@
             AFHTTPRequestOperation *operation = request.operation;
             [operation start];
             [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-                NSLog(@"requestId is  %ld",request.requestId);
+                NSLog(@"requestId is  %ld",request.operation.operationId);
                 [[ANManager sharedInstance] removeRequestFromCache:request];
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             }];
@@ -56,7 +56,8 @@
  *
  *  @return 请求的唯一标识
  */
-- (NSInteger) cacheRequest:(ANRequest *) request category:(int) category
+- (NSInteger) cacheRequest:(ANRequest *) request
+                  category:(int) category
 {
     //先读取原来的请求
     NSString *requestCategory = [NSString stringWithFormat:@"%@",@(category)];
@@ -83,9 +84,9 @@
     }
     
     NSMutableArray *newRequestValues = [NSMutableArray arrayWithArray:requestValues];
-    request.requestId = newRequestValues.count + 1;
     NSData *requestData = [NSKeyedArchiver archivedDataWithRootObject:request];
-    NSDictionary *tmp_data = [NSDictionary dictionaryWithObjects:@[requestData,[NSNumber numberWithInteger:request.requestId]] forKeys:@[@"data",@"id"]];
+    
+    NSDictionary *tmp_data = [NSDictionary dictionaryWithObjects:@[requestData,[NSNumber numberWithInteger:request.operation.operationId]] forKeys:@[@"data",@"id"]];
     
     [newRequestValues addObject:tmp_data];
     
@@ -94,7 +95,7 @@
     [userPrefs setObject:newRequests forKey:RequestsKey];
     [userPrefs synchronize];
     
-    return request.requestId;
+    return request.operation.operationId;
 }
 
 /**
@@ -121,7 +122,7 @@
     
     for (NSDictionary *requestValue in requestValues) {
         ANRequest *tmp = [NSKeyedUnarchiver unarchiveObjectWithData:[requestValue objectForKey:@"data"]];
-        if (request.requestId != tmp.requestId) {
+        if (request.operation.operationId != tmp.operation.operationId) {
             [newRequestValues addObject:requestValue];
         }
     }
@@ -156,7 +157,7 @@
         
         for (NSDictionary *requestValue in requestValues) {
             ANRequest *tmp = [NSKeyedUnarchiver unarchiveObjectWithData:[requestValue objectForKey:@"data"]];
-            if (deleteRequestId != tmp.requestId) {
+            if (deleteRequestId != tmp.operation.operationId) {
                 [newRequestValues addObject:requestValue];
             }
         }
@@ -210,4 +211,27 @@
     return resendRequests;
 }
 
+- (AFHTTPRequestOperation *)POST:(NSString *)URLString
+                      parameters:(id)parameters
+                         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+                         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+    AFHTTPRequestOperation *operation = nil;
+    NSError *serializationError = nil;
+    NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:&serializationError];
+    if (serializationError) {
+        if (failure) {
+            dispatch_async(self.completionQueue ?: dispatch_get_main_queue(), ^{
+                failure(nil, serializationError);
+            });
+        }
+        return nil;
+    }
+    
+    operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
+    
+    [(ANOperationQueue *)self.operationQueue addRequest:nil];
+    
+    return operation;
+}
 @end

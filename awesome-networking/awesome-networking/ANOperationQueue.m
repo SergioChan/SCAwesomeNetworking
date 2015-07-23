@@ -21,13 +21,6 @@
     return sharedInstance;
 }
 
-/**
- *  根据指定的operationId从队列中取消该请求
- *
- *  @param operationId 操作的主键标识
- *
- *  @return 布尔值，代表是否成功执行
- */
 - (BOOL)cancelOperationByOperationId:(NSInteger)operationId
 {
     return NO;
@@ -53,4 +46,9 @@
     return NO;
 }
 
+- (void)addRequest:(ANRequest *)req
+{
+    [super addOperation:req.operation];
+    
+}
 @end

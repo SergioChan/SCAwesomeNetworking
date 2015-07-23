@@ -8,21 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import "ANHeader.h"
+#import "ANOperation.h"
 #import "AFHTTPRequestOperation.h"
 
 @interface ANRequest : NSObject
 {
-    NSInteger requestId;
     NSInteger category;
     NSInteger tag;
-    AFHTTPRequestOperation *operation;
+    ANOperation *operation;
     NSDictionary *context;
 }
-
-/**
- *  主键标识
- */
-@property(nonatomic, assign) NSInteger requestId;
 
 /**
  *  分类
@@ -37,12 +32,13 @@
 /**
  *  基本网络请求操作
  */
-@property(nonatomic, strong) AFHTTPRequestOperation *operation;
+@property(nonatomic, strong) ANOperation *operation;
 
 /**
  *  扩展字典
  */
 @property(nonatomic, strong) NSDictionary *context;
 
-- (instancetype)initWithOperation:(AFHTTPRequestOperation *)oper andCategory:(NSInteger)category;
+- (instancetype)initWithOperation:(AFHTTPRequestOperation *)oper
+                      andCategory:(NSInteger)category;
 @end

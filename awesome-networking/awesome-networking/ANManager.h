@@ -36,7 +36,8 @@ typedef void (^failErrorBlock)(NSError *error);
  *
  *  @return 请求的唯一标识
  */
-- (NSInteger) cacheRequest:(ANRequest *) request category:(int) category;
+- (NSInteger) cacheRequest:(ANRequest *) request
+                  category:(int) category;
 
 /**
  *  删除缓存的请求
