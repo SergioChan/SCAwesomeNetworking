@@ -219,7 +219,6 @@
                          success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                          failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    AFHTTPRequestOperation *operation = nil;
     NSError *serializationError = nil;
     NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:&serializationError];
     if (serializationError) {
@@ -231,14 +230,14 @@
         return nil;
     }
     
-    operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
+    ANOperation *operation = [[ANOperation alloc]initWithOperation:[self HTTPRequestOperationWithRequest:request success:success failure:failure]];
     
     ANRequest *tmp = [[ANRequest alloc]initWithOperation:operation andCategory:category];
     tmp.context = context;
     tmp.tag = tag;
     [(ANOperationQueue *)self.operationQueue addRequest:tmp];
     
-    return operation;
+    return tmp.operation;
 }
 
 - (ANOperation *)POST:(NSString *)URLString

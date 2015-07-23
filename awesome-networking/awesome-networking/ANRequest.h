@@ -39,6 +39,14 @@
  */
 @property(nonatomic, strong) NSDictionary *context;
 
-- (instancetype)initWithOperation:(AFHTTPRequestOperation *)oper
+/**
+ *  初始化方法
+ *
+ *  @param oper     ANOperation 对象
+ *  @param category 缓存的分类
+ *
+ *  @return ANRequest 实例
+ */
+- (instancetype)initWithOperation:(ANOperation *)oper
                       andCategory:(ANCategory)category;
 @end

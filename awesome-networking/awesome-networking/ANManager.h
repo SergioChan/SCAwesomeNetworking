@@ -60,7 +60,7 @@ typedef void (^failErrorBlock)(NSError *error);
 - (NSMutableArray *) getNeedResendRequests:(NSArray *) categories;
 
 /**
- *
+ *  用POST方法创建并运行一个`ANOperation`的对象，附带了附加字典，缓存分类和缓存标识
  *
  *  @param URLString  <#URLString description#>
  *  @param category   <#category description#>
@@ -81,7 +81,7 @@ typedef void (^failErrorBlock)(NSError *error);
                          failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /**
- *  <#Description#>
+ *  用POST方法创建并运行一个`ANOperation`的对象
  *
  *  @param URLString  <#URLString description#>
  *  @param parameters <#parameters description#>
