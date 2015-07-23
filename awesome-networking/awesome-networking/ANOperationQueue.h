@@ -10,10 +10,16 @@
 
 @interface ANOperationQueue : NSOperationQueue
 
+@property (nonatomic, strong) NSMutableDictionary *requestSet;
+
 - (BOOL)cancelOperationByOperationId:(NSInteger)operationId;
+- (BOOL)cacheOperationByOperationId:(NSInteger)operationId;
 
 - (NSArray *)getAllOperations;
 
 + (ANOperationQueue *) sharedInstance;
+
+- (BOOL)cacheAllOperation;
+- (BOOL)cancelAllOperation;
 
 @end

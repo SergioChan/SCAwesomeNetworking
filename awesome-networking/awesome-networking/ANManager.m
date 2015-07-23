@@ -41,7 +41,7 @@
             AFHTTPRequestOperation *operation = request.operation;
             [operation start];
             [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-                NSLog(@"requestId is  %ld",request.operationId);
+                NSLog(@"requestId is  %ld",request.requestId);
                 [[ANManager sharedInstance] removeRequestFromCache:request];
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             }];
@@ -83,9 +83,9 @@
     }
     
     NSMutableArray *newRequestValues = [NSMutableArray arrayWithArray:requestValues];
-    request.operationId = newRequestValues.count + 1;
+    request.requestId = newRequestValues.count + 1;
     NSData *requestData = [NSKeyedArchiver archivedDataWithRootObject:request];
-    NSDictionary *tmp_data = [NSDictionary dictionaryWithObjects:@[requestData,[NSNumber numberWithInteger:request.operationId]] forKeys:@[@"data",@"id"]];
+    NSDictionary *tmp_data = [NSDictionary dictionaryWithObjects:@[requestData,[NSNumber numberWithInteger:request.requestId]] forKeys:@[@"data",@"id"]];
     
     [newRequestValues addObject:tmp_data];
     
@@ -94,7 +94,7 @@
     [userPrefs setObject:newRequests forKey:RequestsKey];
     [userPrefs synchronize];
     
-    return request.operationId;
+    return request.requestId;
 }
 
 /**
@@ -121,7 +121,7 @@
     
     for (NSDictionary *requestValue in requestValues) {
         ANRequest *tmp = [NSKeyedUnarchiver unarchiveObjectWithData:[requestValue objectForKey:@"data"]];
-        if (request.operationId != tmp.operationId) {
+        if (request.requestId != tmp.requestId) {
             [newRequestValues addObject:requestValue];
         }
     }
@@ -156,7 +156,7 @@
         
         for (NSDictionary *requestValue in requestValues) {
             ANRequest *tmp = [NSKeyedUnarchiver unarchiveObjectWithData:[requestValue objectForKey:@"data"]];
-            if (deleteRequestId != tmp.operationId) {
+            if (deleteRequestId != tmp.requestId) {
                 [newRequestValues addObject:requestValue];
             }
         }
@@ -210,5 +210,4 @@
     return resendRequests;
 }
 
-- ()
 @end
