@@ -50,6 +50,10 @@
 {
     [super addOperation:req.operation];
     
-    [self.requestSet setObject:req forKey:[NSString stringWithFormat:@"%ld",(long)req.operation.operationId]];
+    if(req.category != DEFAULT_CATEGORY)
+    {
+        // 如果是默认分类则不添加进需要被缓存的request集合，即扔进去不管
+        [self.requestSet setObject:req forKey:[NSString stringWithFormat:@"%ld",(long)req.operation.operationId]];
+    }
 }
 @end
