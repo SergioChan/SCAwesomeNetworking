@@ -139,7 +139,11 @@
  */
 - (void) removeRequestFromCacheById:(NSInteger)deleteRequestId
 {
-    NSArray *categories = @[@"1",@"2",@"3",@"4",@"5"];
+    NSMutableArray *t_categories = [NSMutableArray array];
+    for(NSInteger i = 0 ;i < MAXCategory ; i++)
+        [t_categories addObject:[NSString stringWithFormat:@"%ld",i]];
+    NSArray *categories = [NSArray arrayWithArray:t_categories];
+    
     NSUserDefaults *userPrefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *tmp_newRequests = [userPrefs objectForKey:RequestsKey];
     NSMutableDictionary *newRequests = [NSMutableDictionary dictionary];
@@ -176,7 +180,10 @@
 - (NSMutableArray *) getNeedResendRequests:(NSArray *) categories
 {
     if (!categories) {
-        categories = @[@"1",@"2",@"3",@"4",@"5"];
+        NSMutableArray *t_categories = [NSMutableArray array];
+        for(NSInteger i = 0 ;i < MAXCategory ; i++)
+            [t_categories addObject:[NSString stringWithFormat:@"%ld",i]];
+        categories = [NSArray arrayWithArray:t_categories];
     }
     
     NSMutableArray *resendRequests = [NSMutableArray array];
@@ -216,6 +223,7 @@
                          context:(NSDictionary *)context
                              tag:(NSInteger)tag
                       parameters:(id)parameters
+                      completion:(void (^)(AFHTTPRequestOperation *operation))completionBlock
                          success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                          failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
@@ -230,22 +238,37 @@
         return nil;
     }
     
-    ANOperation *operation = [[ANOperation alloc]initWithOperation:[self HTTPRequestOperationWithRequest:request success:success failure:failure]];
+    
+    ANOperation *operation = [[ANOperation alloc]initWithOperation:[self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        //确保返回的对象是ANOperation
+        if([operation isKindOfClass:[ANOperation class]])
+            [(ANOperationQueue *)self.operationQueue removeRequestByOperationId:[(ANOperation *)operation operationId]];
+        
+        success(operation,responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(operation,error);
+    }]];
     
     ANRequest *tmp = [[ANRequest alloc]initWithOperation:operation andCategory:category];
     tmp.context = context;
     tmp.tag = tag;
     [(ANOperationQueue *)self.operationQueue addRequest:tmp];
     
+    completionBlock(operation);
+    
     return tmp.operation;
 }
 
 - (ANOperation *)POST:(NSString *)URLString
                       parameters:(id)parameters
+                      completion:(void (^)(AFHTTPRequestOperation *operation))completionBlock
                          success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                          failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
-    return [self POST:URLString category:DEFAULT_CATEGORY context:nil tag:0 parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    return [self POST:URLString category:DEFAULT_CATEGORY context:nil tag:0 parameters:parameters completion:^(AFHTTPRequestOperation *operation){
+        completionBlock(operation);
+    }success:^(AFHTTPRequestOperation *operation, id responseObject) {
         success(operation,responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         failure(operation,error);

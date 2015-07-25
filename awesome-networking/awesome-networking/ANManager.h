@@ -73,12 +73,13 @@ typedef void (^failErrorBlock)(NSError *error);
  *  @return <#return value description#>
  */
 - (ANOperation *)POST:(NSString *)URLString
-                        category:(ANCategory)category
-                         context:(NSDictionary *)context
-                             tag:(NSInteger)tag
-                      parameters:(id)parameters
-                         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-                         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+             category:(ANCategory)category
+              context:(NSDictionary *)context
+                  tag:(NSInteger)tag
+           parameters:(id)parameters
+           completion:(void (^)(AFHTTPRequestOperation *operation))completionBlock
+              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 
 /**
  *  用POST方法创建并运行一个`ANOperation`的对象
@@ -91,7 +92,8 @@ typedef void (^failErrorBlock)(NSError *error);
  *  @return <#return value description#>
  */
 - (ANOperation *)POST:(NSString *)URLString
-                      parameters:(id)parameters
-                         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-                         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+           parameters:(id)parameters
+           completion:(void (^)(AFHTTPRequestOperation *operation))completionBlock
+              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 @end

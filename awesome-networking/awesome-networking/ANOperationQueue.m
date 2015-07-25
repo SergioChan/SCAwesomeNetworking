@@ -56,4 +56,12 @@
         [self.requestSet setObject:req forKey:[NSString stringWithFormat:@"%ld",(long)req.operation.operationId]];
     }
 }
+
+- (void)removeRequestByOperationId:(NSInteger)operationId
+{
+    if ([self.requestSet objectForKey:[NSString stringWithFormat:@"%ld",operationId]])
+    {
+        [self.requestSet removeObjectForKey:[NSString stringWithFormat:@"%ld",operationId]];
+    }
+}
 @end

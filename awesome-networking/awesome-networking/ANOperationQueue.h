@@ -53,6 +53,13 @@
 - (BOOL)cacheAllOperation;
 
 /**
+ *  根据操作的id删除缓存的请求
+ *
+ *  @param operationId 操作id
+ */
+- (void)removeRequestByOperationId:(NSInteger)operationId;
+
+/**
  *  取消队列中的所有操作
  *
  *  @return 是否成功执行的布尔值

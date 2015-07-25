@@ -16,4 +16,5 @@ typedef NS_ENUM(NSInteger,ANCategory){
     TEST_CATEGORY,
 };
 
+#define MAXCategory 1
 #endif
