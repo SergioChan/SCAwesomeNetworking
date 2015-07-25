@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ANManager+test.h"
 
 @interface ViewController : UIViewController
 

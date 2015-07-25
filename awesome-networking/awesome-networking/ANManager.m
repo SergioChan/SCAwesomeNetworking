@@ -223,9 +223,9 @@
                          context:(NSDictionary *)context
                              tag:(NSInteger)tag
                       parameters:(id)parameters
-                      completion:(void (^)(AFHTTPRequestOperation *operation))completionBlock
-                         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-                         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+                      completion:(void (^)(ANOperation *operation))completionBlock
+                         success:(void (^)(ANOperation *operation, id responseObject))success
+                         failure:(void (^)(ANOperation *operation, NSError *error))failure
 {
     NSError *serializationError = nil;
     NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:&serializationError];
@@ -239,39 +239,58 @@
     }
     
     
-    ANOperation *operation = [[ANOperation alloc]initWithOperation:[self HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    ANOperation *t_operation = [self ANHTTPRequestOperationWithRequest:request success:^(ANOperation *operation, id responseObject) {
         
         //确保返回的对象是ANOperation
         if([operation isKindOfClass:[ANOperation class]])
-            [(ANOperationQueue *)self.operationQueue removeRequestByOperationId:[(ANOperation *)operation operationId]];
+            [(ANOperationQueue *)self.operationQueue removeRequestByOperationId:[operation operationId]];
         
         success(operation,responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(ANOperation *operation, NSError *error) {
         failure(operation,error);
-    }]];
+    }];
     
-    ANRequest *tmp = [[ANRequest alloc]initWithOperation:operation andCategory:category];
+    ANRequest *tmp = [[ANRequest alloc]initWithOperation:t_operation andCategory:category];
     tmp.context = context;
     tmp.tag = tag;
-    [(ANOperationQueue *)self.operationQueue addRequest:tmp];
     
-    completionBlock(operation);
+    completionBlock(t_operation);
+    
+    [(ANOperationQueue *)self.operationQueue addRequest:tmp];
     
     return tmp.operation;
 }
 
 - (ANOperation *)POST:(NSString *)URLString
                       parameters:(id)parameters
-                      completion:(void (^)(AFHTTPRequestOperation *operation))completionBlock
-                         success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-                         failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+                      completion:(void (^)(ANOperation *operation))completionBlock
+                         success:(void (^)(ANOperation *operation, id responseObject))success
+                         failure:(void (^)(ANOperation *operation, NSError *error))failure
 {
-    return [self POST:URLString category:DEFAULT_CATEGORY context:nil tag:0 parameters:parameters completion:^(AFHTTPRequestOperation *operation){
+    return [self POST:URLString category:DEFAULT_CATEGORY context:nil tag:0 parameters:parameters completion:^(ANOperation *operation){
         completionBlock(operation);
-    }success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    }success:^(ANOperation *operation, id responseObject) {
         success(operation,responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(ANOperation *operation, NSError *error) {
         failure(operation,error);
     }];
 }
+
+- (ANOperation *)ANHTTPRequestOperationWithRequest:(NSURLRequest *)request
+                                                    success:(void (^)(ANOperation *operation, id responseObject))success
+                                                    failure:(void (^)(ANOperation *operation, NSError *error))failure
+{
+    ANOperation *operation = [[ANOperation alloc] initWithRequest:request];
+    operation.responseSerializer = self.responseSerializer;
+    operation.shouldUseCredentialStorage = self.shouldUseCredentialStorage;
+    operation.credential = self.credential;
+    operation.securityPolicy = self.securityPolicy;
+    
+    [operation setANCompletionBlockWithSuccess:success failure:failure];
+    operation.completionQueue = self.completionQueue;
+    operation.completionGroup = self.completionGroup;
+    
+    return operation;
+}
+
 @end

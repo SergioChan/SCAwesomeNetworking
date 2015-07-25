@@ -16,6 +16,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[ANManager sharedInstance] testRequestCompletion:^{
+        NSLog(@"completed!");
+    } success:^(id object, ...) {
+        NSLog(@"success!");
+    } failure:^(NSError *error) {
+        NSLog(@"error!");
+    }];
     // Do any additional setup after loading the view, typically from a nib.
 }
 

@@ -15,6 +15,8 @@
 #import "AFNetworkActivityIndicatorManager.h"
 
 typedef void (^successBlock)(void);
+typedef void (^completionBlock)(void);
+typedef void (^successWithObjectBlock)(id object, ...);
 typedef void (^failErrorBlock)(NSError *error);
 
 @interface ANManager : AFHTTPRequestOperationManager
@@ -77,9 +79,9 @@ typedef void (^failErrorBlock)(NSError *error);
               context:(NSDictionary *)context
                   tag:(NSInteger)tag
            parameters:(id)parameters
-           completion:(void (^)(AFHTTPRequestOperation *operation))completionBlock
-              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+           completion:(void (^)(ANOperation *operation))completionBlock
+              success:(void (^)(ANOperation *operation, id responseObject))success
+              failure:(void (^)(ANOperation *operation, NSError *error))failure;
 
 /**
  *  用POST方法创建并运行一个`ANOperation`的对象
@@ -93,7 +95,11 @@ typedef void (^failErrorBlock)(NSError *error);
  */
 - (ANOperation *)POST:(NSString *)URLString
            parameters:(id)parameters
-           completion:(void (^)(AFHTTPRequestOperation *operation))completionBlock
-              success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
-              failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+           completion:(void (^)(ANOperation *operation))completionBlock
+              success:(void (^)(ANOperation *operation, id responseObject))success
+              failure:(void (^)(ANOperation *operation, NSError *error))failure;
+
+- (ANOperation *)ANHTTPRequestOperationWithRequest:(NSURLRequest *)request
+                                           success:(void (^)(ANOperation *operation, id responseObject))success
+                                           failure:(void (^)(ANOperation *operation, NSError *error))failure;
 @end

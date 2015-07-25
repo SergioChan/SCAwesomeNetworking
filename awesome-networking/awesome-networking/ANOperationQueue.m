@@ -84,12 +84,16 @@
         // 如果是默认分类则不添加进需要被缓存的request集合，即扔进去不管
         [self.requestSet setObject:req forKey:[NSString stringWithFormat:@"%ld",(long)req.operation.operationId]];
     }
+    
+    [req.operation start];
 }
 
 - (void)removeRequestByOperationId:(NSInteger)operationId
 {
+    NSLog(@"trying to remove operation with id:%ld",operationId);
     if ([self.requestSet objectForKey:[NSString stringWithFormat:@"%ld",operationId]])
     {
+        NSLog(@"removed operation with id:%ld",operationId);
         [self.requestSet removeObjectForKey:[NSString stringWithFormat:@"%ld",operationId]];
     }
 }

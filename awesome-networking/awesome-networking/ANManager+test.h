@@ -11,4 +11,8 @@
 
 @interface ANManager(test)
 
+- (void)testRequestCompletion:(completionBlock)completed
+                      success:(successWithObjectBlock)success
+                      failure:(failErrorBlock)failure;
+
 @end

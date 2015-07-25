@@ -21,12 +21,8 @@
  */
 @property(nonatomic, strong) NSString *timestamp;
 
-/**
- *  由父类实例初始化自身，其实就是生成一个父类实例的copy，然后加上子类的一些特有属性
- *
- *  @param op 父类实例
- *
- *  @return 子类实例
- */
-- (instancetype)initWithOperation:(AFHTTPRequestOperation *)op;
+- (instancetype)initWithRequest:(NSURLRequest *)urlRequest;
+
+- (void)setANCompletionBlockWithSuccess:(void (^)(ANOperation *operation, id responseObject))success
+                                failure:(void (^)(ANOperation *operation, NSError *error))failure;
 @end

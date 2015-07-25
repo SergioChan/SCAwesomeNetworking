@@ -8,6 +8,26 @@
 
 #import "ANOperation.h"
 
+static dispatch_queue_t http_request_operation_processing_queue() {
+    static dispatch_queue_t af_http_request_operation_processing_queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        af_http_request_operation_processing_queue = dispatch_queue_create("com.alamofire.networking.http-request.processing", DISPATCH_QUEUE_CONCURRENT);
+    });
+    
+    return af_http_request_operation_processing_queue;
+}
+
+static dispatch_group_t http_request_operation_completion_group() {
+    static dispatch_group_t af_http_request_operation_completion_group;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        af_http_request_operation_completion_group = dispatch_group_create();
+    });
+    
+    return af_http_request_operation_completion_group;
+}
+
 @implementation ANOperation
 
 @synthesize operationId;
@@ -44,22 +64,56 @@
     return operation;
 }
 
-- (instancetype)initWithOperation:(AFHTTPRequestOperation *)op
-{
-    if(op)
-    {
-        self = [super init];
-        if (self)
-        {
-            self = [(ANOperation *)op copy];
-            self.operationId = (NSInteger)[[NSDate date] timeIntervalSince1970];
-            self.timestamp = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
-        }
-        return self;
-    }
-    else
-    {
+- (instancetype)initWithRequest:(NSURLRequest *)urlRequest {
+    self = [super initWithRequest:urlRequest];
+    if (!self) {
         return nil;
     }
+    self.operationId = (NSInteger)[[NSDate date] timeIntervalSince1970];
+    self.timestamp = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
+    self.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    return self;
+}
+
+- (void)setANCompletionBlockWithSuccess:(void (^)(ANOperation *operation, id responseObject))success
+                              failure:(void (^)(ANOperation *operation, NSError *error))failure
+{
+    // completionBlock is manually nilled out in AFURLConnectionOperation to break the retain cycle.
+    __weak ANOperation *weakSelf = self;
+    self.completionBlock = ^{
+        if (weakSelf.completionGroup) {
+            dispatch_group_enter(weakSelf.completionGroup);
+        }
+        
+        dispatch_async(http_request_operation_processing_queue(), ^{
+            if (weakSelf.error) {
+                if (failure) {
+                    dispatch_group_async(weakSelf.completionGroup ?: http_request_operation_completion_group(), weakSelf.completionQueue ?: dispatch_get_main_queue(), ^{
+                        failure(weakSelf, weakSelf.error);
+                    });
+                }
+            } else {
+                id responseObject = weakSelf.responseObject;
+                if (weakSelf.error) {
+                    if (failure) {
+                        dispatch_group_async(weakSelf.completionGroup ?: http_request_operation_completion_group(), weakSelf.completionQueue ?: dispatch_get_main_queue(), ^{
+                            failure(weakSelf, weakSelf.error);
+                        });
+                    }
+                } else {
+                    if (success) {
+                        dispatch_group_async(weakSelf.completionGroup ?: http_request_operation_completion_group(), weakSelf.completionQueue ?: dispatch_get_main_queue(), ^{
+                            success(weakSelf, responseObject);
+                        });
+                    }
+                }
+            }
+            
+            if (weakSelf.completionGroup) {
+                dispatch_group_leave(weakSelf.completionGroup);
+            }
+        });
+    };
 }
 @end
