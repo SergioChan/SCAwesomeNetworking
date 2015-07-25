@@ -18,6 +18,7 @@
 		229AD8231B5E42A800EDF5FE /* ANRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD8221B5E42A800EDF5FE /* ANRequest.m */; };
 		229AD8271B5E430800EDF5FE /* ANOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD8261B5E430800EDF5FE /* ANOperation.m */; };
 		229AD82A1B5E9A0A00EDF5FE /* ANOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD8291B5E9A0A00EDF5FE /* ANOperationQueue.m */; };
+		229AD8301B63359600EDF5FE /* ANManager+test.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD82F1B63359500EDF5FE /* ANManager+test.m */; };
 		96BCAC683FFEF88E7932D7DA /* libPods-awesome-networking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B66BC46537D32016A698506B /* libPods-awesome-networking.a */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,8 @@
 		229AD8261B5E430800EDF5FE /* ANOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANOperation.m; sourceTree = "<group>"; };
 		229AD8281B5E9A0A00EDF5FE /* ANOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANOperationQueue.h; sourceTree = "<group>"; };
 		229AD8291B5E9A0A00EDF5FE /* ANOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANOperationQueue.m; sourceTree = "<group>"; };
+		229AD82E1B63359500EDF5FE /* ANManager+test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ANManager+test.h"; sourceTree = "<group>"; };
+		229AD82F1B63359500EDF5FE /* ANManager+test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ANManager+test.m"; sourceTree = "<group>"; };
 		B66BC46537D32016A698506B /* libPods-awesome-networking.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-awesome-networking.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -152,6 +155,8 @@
 				229AD8261B5E430800EDF5FE /* ANOperation.m */,
 				229AD8281B5E9A0A00EDF5FE /* ANOperationQueue.h */,
 				229AD8291B5E9A0A00EDF5FE /* ANOperationQueue.m */,
+				229AD82E1B63359500EDF5FE /* ANManager+test.h */,
+				229AD82F1B63359500EDF5FE /* ANManager+test.m */,
 			);
 			name = "awesome-networking";
 			sourceTree = "<group>";
@@ -308,6 +313,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				229AD8301B63359600EDF5FE /* ANManager+test.m in Sources */,
 				229AD8271B5E430800EDF5FE /* ANOperation.m in Sources */,
 				229AD8231B5E42A800EDF5FE /* ANRequest.m in Sources */,
 				229AD8201B5E427B00EDF5FE /* ANManager.m in Sources */,

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ANRequest.h"
+#import "ANManager.h"
 
 @interface ANOperationQueue : NSOperationQueue
 

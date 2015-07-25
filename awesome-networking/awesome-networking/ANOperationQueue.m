@@ -16,6 +16,7 @@
     static ANOperationQueue * sharedInstance;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[ANOperationQueue alloc] init];
+        sharedInstance.maxConcurrentOperationCount = 1;
         sharedInstance.requestSet = [NSMutableDictionary dictionary];
     });
     return sharedInstance;
@@ -23,27 +24,55 @@
 
 - (BOOL)cancelOperationByOperationId:(NSInteger)operationId
 {
-    return NO;
+    if([self.requestSet objectForKey:@(operationId)])
+    {
+        ANRequest *tmp = (ANRequest *)[self.requestSet objectForKey:@(operationId)];
+        [tmp.operation cancel];
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
 }
 
 - (BOOL)cacheOperationByOperationId:(NSInteger)operationId
 {
-    return NO;
+    if([self.requestSet objectForKey:@(operationId)])
+    {
+        ANRequest *tmp = (ANRequest *)[self.requestSet objectForKey:@(operationId)];
+        [[ANManager sharedInstance] cacheRequest:tmp category:tmp.category];
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
 }
 
 - (NSArray *)getAllOperations
 {
-    return nil;
+    NSMutableArray * t_return = [NSMutableArray array];
+    for(ANRequest *t_request in self.requestSet)
+    {
+        [t_return addObject:t_request.operation];
+    }
+    return t_return;
 }
 
 - (BOOL)cacheAllOperation
 {
-    return NO;
+    for(ANRequest *t_request in self.requestSet)
+    {
+        [[ANManager sharedInstance] cacheRequest:t_request category:t_request.category];
+    }
+    return YES;
 }
 
 - (BOOL)cancelAllOperation
 {
-    return NO;
+    [self cancelAllOperations];
+    return YES;
 }
 
 - (void)addRequest:(ANRequest *)req
