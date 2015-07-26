@@ -79,7 +79,7 @@ typedef void (^failErrorBlock)(NSError *error);
               context:(NSDictionary *)context
                   tag:(NSInteger)tag
            parameters:(id)parameters
-           completion:(void (^)(ANOperation *operation))completionBlock
+           completion:(void (^)(ANOperation *operation))completed
               success:(void (^)(ANOperation *operation, id responseObject))success
               failure:(void (^)(ANOperation *operation, NSError *error))failure;
 
@@ -95,7 +95,7 @@ typedef void (^failErrorBlock)(NSError *error);
  */
 - (ANOperation *)POST:(NSString *)URLString
            parameters:(id)parameters
-           completion:(void (^)(ANOperation *operation))completionBlock
+           completion:(void (^)(ANOperation *operation))completed
               success:(void (^)(ANOperation *operation, id responseObject))success
               failure:(void (^)(ANOperation *operation, NSError *error))failure;
 

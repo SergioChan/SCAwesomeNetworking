@@ -12,7 +12,7 @@ static dispatch_queue_t http_request_operation_processing_queue() {
     static dispatch_queue_t af_http_request_operation_processing_queue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        af_http_request_operation_processing_queue = dispatch_queue_create("com.alamofire.networking.http-request.processing", DISPATCH_QUEUE_CONCURRENT);
+        af_http_request_operation_processing_queue = dispatch_queue_create("com.sergio.awesome-networking.http-request.processing", DISPATCH_QUEUE_CONCURRENT);
     });
     
     return af_http_request_operation_processing_queue;

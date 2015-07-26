@@ -223,7 +223,7 @@
                          context:(NSDictionary *)context
                              tag:(NSInteger)tag
                       parameters:(id)parameters
-                      completion:(void (^)(ANOperation *operation))completionBlock
+                      completion:(void (^)(ANOperation *operation))completed
                          success:(void (^)(ANOperation *operation, id responseObject))success
                          failure:(void (^)(ANOperation *operation, NSError *error))failure
 {
@@ -247,6 +247,9 @@
         
         success(operation,responseObject);
     } failure:^(ANOperation *operation, NSError *error) {
+        if([operation isKindOfClass:[ANOperation class]])
+            [(ANOperationQueue *)self.operationQueue removeRequestByOperationId:[operation operationId]];
+        
         failure(operation,error);
     }];
     
@@ -254,21 +257,22 @@
     tmp.context = context;
     tmp.tag = tag;
     
-    completionBlock(t_operation);
+    completed(t_operation);
     
     [(ANOperationQueue *)self.operationQueue addRequest:tmp];
+    [(ANOperationQueue *)self.operationQueue addOperation:t_operation];
     
-    return tmp.operation;
+    return t_operation;
 }
 
 - (ANOperation *)POST:(NSString *)URLString
                       parameters:(id)parameters
-                      completion:(void (^)(ANOperation *operation))completionBlock
+                      completion:(void (^)(ANOperation *operation))completed
                          success:(void (^)(ANOperation *operation, id responseObject))success
                          failure:(void (^)(ANOperation *operation, NSError *error))failure
 {
     return [self POST:URLString category:DEFAULT_CATEGORY context:nil tag:0 parameters:parameters completion:^(ANOperation *operation){
-        completionBlock(operation);
+        completed(operation);
     }success:^(ANOperation *operation, id responseObject) {
         success(operation,responseObject);
     } failure:^(ANOperation *operation, NSError *error) {

@@ -7,9 +7,11 @@
 //
 
 #import "ViewController.h"
+#define ScreenWidth                         [[UIScreen mainScreen] bounds].size.width
+#define ScreenHeight                        [[UIScreen mainScreen] bounds].size.height
 
 @interface ViewController ()
-
+@property (strong, nonatomic) ANOperation *test_operation;
 @end
 
 @implementation ViewController
@@ -23,7 +25,20 @@
     } failure:^(NSError *error) {
         NSLog(@"error!");
     }];
+    
+    UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake((ScreenWidth - 60.0f)/2.0f, (ScreenHeight - 60.0f)/2.0f, 60.0f, 60.0f)];
+    [btn setTitle:@"Push" forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(btnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    btn.backgroundColor = [UIColor redColor];
+    btn.titleLabel.textColor = [UIColor whiteColor];
+    [self.view addSubview:btn];
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void)btnPressed:(id)sender
+{
+    NSArray *tmp = [[ANOperationQueue sharedInstance] getAllOperations];
+    NSLog(@"%@",tmp);
 }
 
 - (void)didReceiveMemoryWarning {
