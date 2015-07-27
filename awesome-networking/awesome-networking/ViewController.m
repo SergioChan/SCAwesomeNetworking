@@ -21,7 +21,7 @@
     [[ANManager sharedInstance] testRequestCompletion:^{
         NSLog(@"completed!");
     } success:^(id object, ...) {
-        NSLog(@"success!");
+        NSLog(@"success!%@",object);
     } failure:^(NSError *error) {
         NSLog(@"error!");
     }];

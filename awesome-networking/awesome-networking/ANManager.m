@@ -60,6 +60,7 @@
                   category:(int) category
 {
     //先读取原来的请求
+    NSLog(@"cache request:%ld",request.operation.operationId);
     NSString *requestCategory = [NSString stringWithFormat:@"%@",@(category)];
     NSUserDefaults *userPrefs = [NSUserDefaults standardUserDefaults];
     NSDictionary *requests = [userPrefs objectForKey:RequestsKey];
@@ -238,18 +239,14 @@
         return nil;
     }
     
-    
     ANOperation *t_operation = [self ANHTTPRequestOperationWithRequest:request success:^(ANOperation *operation, id responseObject) {
-        
-        //确保返回的对象是ANOperation
-        if([operation isKindOfClass:[ANOperation class]])
-            [(ANOperationQueue *)self.operationQueue removeRequestByOperationId:[operation operationId]];
-        
+        [(ANOperationQueue *)self.operationQueue removeRequestByOperationId:[operation operationId]];
         success(operation,responseObject);
     } failure:^(ANOperation *operation, NSError *error) {
-        if([operation isKindOfClass:[ANOperation class]])
-            [(ANOperationQueue *)self.operationQueue removeRequestByOperationId:[operation operationId]];
+        if(error.code == HTTP_NONETWORK_CODE || error.code == HTTP_NOTCONNECTEDTOSERVER_CODE || error.code == HTTP_TIMEOUT_CODE)
+            [(ANOperationQueue *)self.operationQueue cacheOperationByOperationId:[operation operationId]];
         
+        [(ANOperationQueue *)self.operationQueue removeRequestByOperationId:[operation operationId]];
         failure(operation,error);
     }];
     

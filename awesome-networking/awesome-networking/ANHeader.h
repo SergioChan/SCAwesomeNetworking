@@ -17,4 +17,9 @@ typedef NS_ENUM(NSInteger,ANCategory){
 };
 
 #define MAXCategory 1
+
+#define HTTP_TIMEOUT_CODE -1009
+#define HTTP_NONETWORK_CODE -1001
+#define HTTP_NOTCONNECTEDTOSERVER_CODE -1004
+
 #endif

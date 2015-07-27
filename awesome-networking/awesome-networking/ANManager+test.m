@@ -14,7 +14,7 @@
                       success:(successWithObjectBlock)success
                       failure:(failErrorBlock)failure
 {
-    NSString *test_url = @"http://127.0.0.1:8889/test/";
+    NSString *test_url = @"http://****.tataufo.com/test/";
     [self POST:test_url category:TEST_CATEGORY context:[NSDictionary dictionary] tag:1002 parameters:nil completion:^(ANOperation *operation) {
         completed();
     } success:^(ANOperation *operation, id responseObject) {
