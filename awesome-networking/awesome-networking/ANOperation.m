@@ -80,40 +80,44 @@ static dispatch_group_t http_request_operation_completion_group() {
                               failure:(void (^)(ANOperation *operation, NSError *error))failure
 {
     // completionBlock is manually nilled out in AFURLConnectionOperation to break the retain cycle.
-    __weak ANOperation *weakSelf = self;
+    // __weak ANOperation *weakSelf = self;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-retain-cycles"
+#pragma clang diagnostic ignored "-Wgnu"
     self.completionBlock = ^{
-        if (weakSelf.completionGroup) {
-            dispatch_group_enter(weakSelf.completionGroup);
+        if (self.completionGroup) {
+            dispatch_group_enter(self.completionGroup);
         }
         
         dispatch_async(http_request_operation_processing_queue(), ^{
-            if (weakSelf.error) {
+            if (self.error) {
                 if (failure) {
-                    dispatch_group_async(weakSelf.completionGroup ?: http_request_operation_completion_group(), weakSelf.completionQueue ?: dispatch_get_main_queue(), ^{
-                        failure(weakSelf, weakSelf.error);
+                    dispatch_group_async(self.completionGroup ?: http_request_operation_completion_group(), self.completionQueue ?: dispatch_get_main_queue(), ^{
+                        failure(self, self.error);
                     });
                 }
             } else {
-                id responseObject = weakSelf.responseObject;
-                if (weakSelf.error) {
+                id responseObject = self.responseObject;
+                if (self.error) {
                     if (failure) {
-                        dispatch_group_async(weakSelf.completionGroup ?: http_request_operation_completion_group(), weakSelf.completionQueue ?: dispatch_get_main_queue(), ^{
-                            failure(weakSelf, weakSelf.error);
+                        dispatch_group_async(self.completionGroup ?: http_request_operation_completion_group(), self.completionQueue ?: dispatch_get_main_queue(), ^{
+                            failure(self, self.error);
                         });
                     }
                 } else {
                     if (success) {
-                        dispatch_group_async(weakSelf.completionGroup ?: http_request_operation_completion_group(), weakSelf.completionQueue ?: dispatch_get_main_queue(), ^{
-                            success(weakSelf, responseObject);
+                        dispatch_group_async(self.completionGroup ?: http_request_operation_completion_group(), self.completionQueue ?: dispatch_get_main_queue(), ^{
+                            success(self, responseObject);
                         });
                     }
                 }
             }
             
-            if (weakSelf.completionGroup) {
-                dispatch_group_leave(weakSelf.completionGroup);
+            if (self.completionGroup) {
+                dispatch_group_leave(self.completionGroup);
             }
         });
     };
+#pragma clang diagnostic pop
 }
 @end

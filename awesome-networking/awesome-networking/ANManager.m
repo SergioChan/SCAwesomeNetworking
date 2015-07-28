@@ -38,13 +38,13 @@
     NSMutableArray *dataArray = [[ANManager sharedInstance] getNeedResendRequests:categories];
     
     for (ANRequest *request  in dataArray) {
-            AFHTTPRequestOperation *operation = request.operation;
-            [operation start];
-            [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-                NSLog(@"requestId is  %ld",request.operation.operationId);
-                [[ANManager sharedInstance] removeRequestFromCache:request];
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            }];
+        AFHTTPRequestOperation *operation = request.operation;
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"requestId is  %ld",request.operation.operationId);
+            [[ANManager sharedInstance] removeRequestFromCache:request];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        }];
+        [operation start];
     }
 }
 
