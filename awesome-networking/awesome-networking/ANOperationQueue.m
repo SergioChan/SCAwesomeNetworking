@@ -24,9 +24,10 @@
 
 - (BOOL)cancelOperationByOperationId:(NSInteger)operationId
 {
-    if([self.requestSet objectForKey:@(operationId)])
+    NSString *operationKey = [NSString stringWithFormat:@"%ld",operationId];
+    if([self.requestSet objectForKey:operationKey])
     {
-        ANRequest *tmp = (ANRequest *)[self.requestSet objectForKey:@(operationId)];
+        ANRequest *tmp = (ANRequest *)[self.requestSet objectForKey:operationKey];
         [tmp.operation cancel];
         return YES;
     }
@@ -38,9 +39,10 @@
 
 - (BOOL)cacheOperationByOperationId:(NSInteger)operationId
 {
-    if([self.requestSet objectForKey:@(operationId)])
+    NSString *operationKey = [NSString stringWithFormat:@"%ld",operationId];
+    if([self.requestSet objectForKey:operationKey])
     {
-        ANRequest *tmp = (ANRequest *)[self.requestSet objectForKey:@(operationId)];
+        ANRequest *tmp = (ANRequest *)[self.requestSet objectForKey:operationKey];
         [[ANManager sharedInstance] cacheRequest:tmp category:tmp.category];
         return YES;
     }
@@ -87,10 +89,11 @@
 - (void)removeRequestByOperationId:(NSInteger)operationId
 {
     NSLog(@"trying to remove operation with id:%ld",operationId);
-    if ([self.requestSet objectForKey:[NSString stringWithFormat:@"%ld",operationId]])
+    NSString *operationKey = [NSString stringWithFormat:@"%ld",operationId];
+    if ([self.requestSet objectForKey:operationKey])
     {
         NSLog(@"removed operation with id:%ld",operationId);
-        [self.requestSet removeObjectForKey:[NSString stringWithFormat:@"%ld",operationId]];
+        [self.requestSet removeObjectForKey:operationKey];
     }
 }
 @end

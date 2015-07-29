@@ -243,7 +243,7 @@
         [(ANOperationQueue *)self.operationQueue removeRequestByOperationId:[operation operationId]];
         success(operation,responseObject);
     } failure:^(ANOperation *operation, NSError *error) {
-        if(error.code == HTTP_NONETWORK_CODE || error.code == HTTP_NOTCONNECTEDTOSERVER_CODE || error.code == HTTP_TIMEOUT_CODE)
+        if(error.code == HTTP_NONETWORK_CODE || error.code == HTTP_NOTCONNECTEDTOSERVER_CODE || error.code == HTTP_TIMEOUT_CODE || error.code == HTTP_RESPONSENOTJSON_CODE)
             [(ANOperationQueue *)self.operationQueue cacheOperationByOperationId:[operation operationId]];
         
         [(ANOperationQueue *)self.operationQueue removeRequestByOperationId:[operation operationId]];
@@ -293,5 +293,15 @@
     
     return operation;
 }
+
+//- (NSInteger)codeForUnderlyingError:(NSError *)error
+//{
+//    NSDictionary *underlyingErrorInfo = error.userInfo;
+//    if([underlyingErrorInfo objectForKey:@"NSUnderlyingError"])
+//    {
+//        NSError *errorToReturn = [underlyingErrorInfo objectForKey:@"NSUnderlyingError"];
+//        return errorToReturn.code;
+//    }
+//}
 
 @end
