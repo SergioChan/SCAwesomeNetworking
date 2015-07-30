@@ -14,12 +14,13 @@
 		227DF2511B5E0BE700DC3D59 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 227DF2501B5E0BE700DC3D59 /* Images.xcassets */; };
 		227DF2541B5E0BE700DC3D59 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 227DF2521B5E0BE700DC3D59 /* LaunchScreen.xib */; };
 		227DF2601B5E0BE700DC3D59 /* awesome_networkingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 227DF25F1B5E0BE700DC3D59 /* awesome_networkingTests.m */; };
+		227E52651B6A1F30004A9696 /* ANRequestSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 227E52641B6A1F30004A9696 /* ANRequestSerializer.m */; };
+		227E52681B6A20CC004A9696 /* ANResponseSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 227E52671B6A20CC004A9696 /* ANResponseSerializer.m */; };
 		229AD8201B5E427B00EDF5FE /* ANManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD81F1B5E427B00EDF5FE /* ANManager.m */; };
 		229AD8231B5E42A800EDF5FE /* ANRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD8221B5E42A800EDF5FE /* ANRequest.m */; };
 		229AD8271B5E430800EDF5FE /* ANOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD8261B5E430800EDF5FE /* ANOperation.m */; };
 		229AD82A1B5E9A0A00EDF5FE /* ANOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD8291B5E9A0A00EDF5FE /* ANOperationQueue.m */; };
 		229AD8301B63359600EDF5FE /* ANManager+test.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD82F1B63359500EDF5FE /* ANManager+test.m */; };
-		96BCAC683FFEF88E7932D7DA /* libPods-awesome-networking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B66BC46537D32016A698506B /* libPods-awesome-networking.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,10 @@
 		227DF2591B5E0BE700DC3D59 /* awesome-networkingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "awesome-networkingTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		227DF25E1B5E0BE700DC3D59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		227DF25F1B5E0BE700DC3D59 /* awesome_networkingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = awesome_networkingTests.m; sourceTree = "<group>"; };
+		227E52631B6A1F30004A9696 /* ANRequestSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANRequestSerializer.h; sourceTree = "<group>"; };
+		227E52641B6A1F30004A9696 /* ANRequestSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANRequestSerializer.m; sourceTree = "<group>"; };
+		227E52661B6A20CC004A9696 /* ANResponseSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANResponseSerializer.h; sourceTree = "<group>"; };
+		227E52671B6A20CC004A9696 /* ANResponseSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANResponseSerializer.m; sourceTree = "<group>"; };
 		229AD81E1B5E427B00EDF5FE /* ANManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANManager.h; sourceTree = "<group>"; };
 		229AD81F1B5E427B00EDF5FE /* ANManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANManager.m; sourceTree = "<group>"; };
 		229AD8211B5E42A800EDF5FE /* ANRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANRequest.h; sourceTree = "<group>"; };
@@ -67,7 +72,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96BCAC683FFEF88E7932D7DA /* libPods-awesome-networking.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,20 +147,48 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		229AD81D1B5E41FF00EDF5FE /* awesome-networking */ = {
+		227E52691B6A21BD004A9696 /* CustomCategory */ = {
+			isa = PBXGroup;
+			children = (
+				229AD82E1B63359500EDF5FE /* ANManager+test.h */,
+				229AD82F1B63359500EDF5FE /* ANManager+test.m */,
+			);
+			name = CustomCategory;
+			sourceTree = "<group>";
+		};
+		227E526A1B6A21D2004A9696 /* Connection */ = {
 			isa = PBXGroup;
 			children = (
 				229AD81E1B5E427B00EDF5FE /* ANManager.h */,
 				229AD81F1B5E427B00EDF5FE /* ANManager.m */,
 				229AD8211B5E42A800EDF5FE /* ANRequest.h */,
 				229AD8221B5E42A800EDF5FE /* ANRequest.m */,
-				229AD8241B5E42BF00EDF5FE /* ANHeader.h */,
 				229AD8251B5E430800EDF5FE /* ANOperation.h */,
 				229AD8261B5E430800EDF5FE /* ANOperation.m */,
 				229AD8281B5E9A0A00EDF5FE /* ANOperationQueue.h */,
 				229AD8291B5E9A0A00EDF5FE /* ANOperationQueue.m */,
-				229AD82E1B63359500EDF5FE /* ANManager+test.h */,
-				229AD82F1B63359500EDF5FE /* ANManager+test.m */,
+			);
+			name = Connection;
+			sourceTree = "<group>";
+		};
+		227E526B1B6A21E7004A9696 /* Serialization */ = {
+			isa = PBXGroup;
+			children = (
+				227E52631B6A1F30004A9696 /* ANRequestSerializer.h */,
+				227E52641B6A1F30004A9696 /* ANRequestSerializer.m */,
+				227E52661B6A20CC004A9696 /* ANResponseSerializer.h */,
+				227E52671B6A20CC004A9696 /* ANResponseSerializer.m */,
+			);
+			name = Serialization;
+			sourceTree = "<group>";
+		};
+		229AD81D1B5E41FF00EDF5FE /* awesome-networking */ = {
+			isa = PBXGroup;
+			children = (
+				229AD8241B5E42BF00EDF5FE /* ANHeader.h */,
+				227E526B1B6A21E7004A9696 /* Serialization */,
+				227E526A1B6A21D2004A9696 /* Connection */,
+				227E52691B6A21BD004A9696 /* CustomCategory */,
 			);
 			name = "awesome-networking";
 			sourceTree = "<group>";
@@ -316,11 +348,13 @@
 				229AD8301B63359600EDF5FE /* ANManager+test.m in Sources */,
 				229AD8271B5E430800EDF5FE /* ANOperation.m in Sources */,
 				229AD8231B5E42A800EDF5FE /* ANRequest.m in Sources */,
+				227E52681B6A20CC004A9696 /* ANResponseSerializer.m in Sources */,
 				229AD8201B5E427B00EDF5FE /* ANManager.m in Sources */,
 				227DF24C1B5E0BE700DC3D59 /* ViewController.m in Sources */,
 				227DF2491B5E0BE700DC3D59 /* AppDelegate.m in Sources */,
 				229AD82A1B5E9A0A00EDF5FE /* ANOperationQueue.m in Sources */,
 				227DF2461B5E0BE600DC3D59 /* main.m in Sources */,
+				227E52651B6A1F30004A9696 /* ANRequestSerializer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
