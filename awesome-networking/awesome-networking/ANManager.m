@@ -16,15 +16,21 @@
     static ANManager * sharedInstance;
     dispatch_once(&onceToken, ^{
         sharedInstance = [[ANManager alloc] init];
-        sharedInstance.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"text/json", @"text/plain",@"text/xml",@"application/rss+xml", @"application/json", nil];
-        sharedInstance.requestSerializer = [AFHTTPRequestSerializer serializer];
-        sharedInstance.requestSerializer.timeoutInterval=10.0f;
-        sharedInstance.operationQueue = [ANOperationQueue sharedInstance];
-        [AFNetworkActivityIndicatorManager sharedManager].enabled=YES;
+        
+#pragma 这里建议将responseSerializer的可接受content-type设置成和服务器协议一致，可以保证response的序列化顺利完成
+        sharedInstance.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"text/json", @"text/plain",@"text/xml",@"application/rss+xml", @"application/json", @"application/octet-stream", nil];
+        sharedInstance.responseSerializer = [ANResponseSerializer serializer];
+        
+        sharedInstance.requestSerializer = [ANRequestSerializer serializer];
+        sharedInstance.requestSerializer.timeoutInterval=GLOBAL_TIMEOUT_INTERVAL;
         sharedInstance.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithObjects:@"GET", @"HEAD",nil];
         sharedInstance.requestSerializer.cachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
+        
+        sharedInstance.operationQueue = [ANOperationQueue sharedInstance];
+        [AFNetworkActivityIndicatorManager sharedManager].enabled=YES;
         [sharedInstance.reachabilityManager startMonitoring];
     });
+    
     return sharedInstance;
 }
 
@@ -40,11 +46,11 @@
     for (ANRequest *request  in dataArray) {
         AFHTTPRequestOperation *operation = request.operation;
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            NSLog(@"requestId is  %ld",request.operation.operationId);
             [[ANManager sharedInstance] removeRequestFromCache:request];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         }];
-        [operation start];
+        
+        [(ANOperationQueue *)self.operationQueue addOperation:operation];
     }
 }
 

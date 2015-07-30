@@ -79,8 +79,6 @@ static dispatch_group_t http_request_operation_completion_group() {
 - (void)setANCompletionBlockWithSuccess:(void (^)(ANOperation *operation, id responseObject))success
                               failure:(void (^)(ANOperation *operation, NSError *error))failure
 {
-    // completionBlock is manually nilled out in AFURLConnectionOperation to break the retain cycle.
-    // __weak ANOperation *weakSelf = self;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-retain-cycles"
 #pragma clang diagnostic ignored "-Wgnu"

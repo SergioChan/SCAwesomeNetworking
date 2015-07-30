@@ -14,6 +14,9 @@
 #import "AFHTTPRequestOperationManager.h"
 #import "AFNetworkActivityIndicatorManager.h"
 
+#import "ANRequestSerializer.h"
+#import "ANResponseSerializer.h"
+
 typedef void (^successBlock)(void);
 typedef void (^completionBlock)(void);
 typedef void (^successWithObjectBlock)(id object, ...);

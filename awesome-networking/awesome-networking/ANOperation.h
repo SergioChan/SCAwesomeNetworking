@@ -21,8 +21,21 @@
  */
 @property(nonatomic, strong) NSString *timestamp;
 
+/**
+ *  覆盖了父类的初始化方法
+ *
+ *  @param urlRequest NSURLRequest
+ *
+ *  @return 实例
+ */
 - (instancetype)initWithRequest:(NSURLRequest *)urlRequest;
 
+/**
+ *  设置回调block的方法
+ *
+ *  @param success Callback when request is successfully operated
+ *  @param failure Callback when request is failed to operate
+ */
 - (void)setANCompletionBlockWithSuccess:(void (^)(ANOperation *operation, id responseObject))success
                                 failure:(void (^)(ANOperation *operation, NSError *error))failure;
 @end
