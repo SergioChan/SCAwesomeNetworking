@@ -17,7 +17,7 @@
     dispatch_once(&onceToken, ^{
         sharedInstance = [[ANManager alloc] init];
         
-#pragma 这里建议将responseSerializer的可接受content-type设置成和服务器协议一致，可以保证response的序列化顺利完成
+#pragma - 这里建议将responseSerializer的可接受content-type设置成和服务器协议一致，可以保证response的序列化顺利完成
         sharedInstance.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"text/json", @"text/plain",@"text/xml",@"application/rss+xml", @"application/json", @"application/octet-stream", nil];
         sharedInstance.responseSerializer = [ANResponseSerializer serializer];
         
