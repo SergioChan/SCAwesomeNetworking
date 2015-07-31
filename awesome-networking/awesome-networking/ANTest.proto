@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+// 全局请求格式体
+message Request {
+  int32 cmdid = 1;
+  int64 timestamp = 2;
+}
+
+// 全局文件格式
+message ANFile {
+	string filename = 1;
+	string url = 2;
+	bytes content = 3;
+	string mimetype = 4;
+}
+
+// 测试文本消息请求
+message testMessage {
+  Request common = 1;
+  string content = 2;
+}
+
+// 测试文本带图片消息请求
+message testMessageWithImage {
+  Request common = 1;
+  string content = 2;
+  repeated ANFile images = 3;
+}

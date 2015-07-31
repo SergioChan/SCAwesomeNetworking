@@ -17,6 +17,8 @@
 #import "ANRequestSerializer.h"
 #import "ANResponseSerializer.h"
 
+#import "Antest.pbobjc.h"
+
 typedef void (^successBlock)(void);
 typedef void (^completionBlock)(void);
 typedef void (^successWithObjectBlock)(id object, ...);
@@ -67,15 +69,15 @@ typedef void (^failErrorBlock)(NSError *error);
 /**
  *  用POST方法创建并运行一个`ANOperation`的对象，附带了附加字典，缓存分类和缓存标识
  *
- *  @param URLString  <#URLString description#>
- *  @param category   <#category description#>
- *  @param context    <#context description#>
- *  @param tag        <#tag description#>
- *  @param parameters <#parameters description#>
- *  @param success    <#success description#>
- *  @param failure    <#failure description#>
+ *  @param URLString  请求的目标地址
+ *  @param category   请求的缓存分类
+ *  @param context    请求的缓存拓展字典
+ *  @param tag        请求的缓存标签
+ *  @param parameters 请求的参数，若为普通POST请求则传入NSDictionary即可，若采用protoBuffer，则需要传入NSData
+ *  @param success
+ *  @param failure
  *
- *  @return <#return value description#>
+ *  @return ANOperation
  */
 - (ANOperation *)POST:(NSString *)URLString
              category:(ANCategory)category
@@ -89,12 +91,12 @@ typedef void (^failErrorBlock)(NSError *error);
 /**
  *  用POST方法创建并运行一个`ANOperation`的对象
  *
- *  @param URLString  <#URLString description#>
- *  @param parameters <#parameters description#>
- *  @param success    <#success description#>
- *  @param failure    <#failure description#>
+ *  @param URLString  请求的目标地址
+ *  @param parameters 请求的参数，若为普通POST请求则传入NSDictionary即可，若采用protoBuffer，则需要传入NSData
+ *  @param success
+ *  @param failure
  *
- *  @return <#return value description#>
+ *  @return ANOperation
  */
 - (ANOperation *)POST:(NSString *)URLString
            parameters:(id)parameters

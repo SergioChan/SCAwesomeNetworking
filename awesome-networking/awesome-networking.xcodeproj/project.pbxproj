@@ -41,6 +41,8 @@
 		227E52C41B6B021B004A9696 /* GPBUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 227E52A91B6B021B004A9696 /* GPBUtilities.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		227E52C51B6B021B004A9696 /* GPBWellKnownTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 227E52AB1B6B021B004A9696 /* GPBWellKnownTypes.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		227E52C61B6B021B004A9696 /* GPBWireFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 227E52AD1B6B021B004A9696 /* GPBWireFormat.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		227E52D31B6BD43C004A9696 /* ANTest.proto in Resources */ = {isa = PBXBuildFile; fileRef = 227E52D21B6BD43C004A9696 /* ANTest.proto */; };
+		227E52D61B6BD485004A9696 /* Antest.pbobjc.m in Sources */ = {isa = PBXBuildFile; fileRef = 227E52D51B6BD485004A9696 /* Antest.pbobjc.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		229AD8201B5E427B00EDF5FE /* ANManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD81F1B5E427B00EDF5FE /* ANManager.m */; };
 		229AD8231B5E42A800EDF5FE /* ANRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD8221B5E42A800EDF5FE /* ANRequest.m */; };
 		229AD8271B5E430800EDF5FE /* ANOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 229AD8261B5E430800EDF5FE /* ANOperation.m */; };
@@ -141,6 +143,9 @@
 		227E52AB1B6B021B004A9696 /* GPBWellKnownTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPBWellKnownTypes.m; sourceTree = "<group>"; };
 		227E52AC1B6B021B004A9696 /* GPBWireFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPBWireFormat.h; sourceTree = "<group>"; };
 		227E52AD1B6B021B004A9696 /* GPBWireFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPBWireFormat.m; sourceTree = "<group>"; };
+		227E52D21B6BD43C004A9696 /* ANTest.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ANTest.proto; sourceTree = "<group>"; };
+		227E52D41B6BD485004A9696 /* Antest.pbobjc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Antest.pbobjc.h; sourceTree = "<group>"; };
+		227E52D51B6BD485004A9696 /* Antest.pbobjc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Antest.pbobjc.m; sourceTree = "<group>"; };
 		229AD81E1B5E427B00EDF5FE /* ANManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANManager.h; sourceTree = "<group>"; };
 		229AD81F1B5E427B00EDF5FE /* ANManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANManager.m; sourceTree = "<group>"; };
 		229AD8211B5E42A800EDF5FE /* ANRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANRequest.h; sourceTree = "<group>"; };
@@ -360,6 +365,9 @@
 		229AD81D1B5E41FF00EDF5FE /* awesome-networking */ = {
 			isa = PBXGroup;
 			children = (
+				227E52D41B6BD485004A9696 /* Antest.pbobjc.h */,
+				227E52D51B6BD485004A9696 /* Antest.pbobjc.m */,
+				227E52D21B6BD43C004A9696 /* ANTest.proto */,
 				229AD8241B5E42BF00EDF5FE /* ANHeader.h */,
 				227E526B1B6A21E7004A9696 /* Serialization */,
 				227E526A1B6A21D2004A9696 /* Connection */,
@@ -468,6 +476,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				227DF24F1B5E0BE700DC3D59 /* Main.storyboard in Resources */,
+				227E52D31B6BD43C004A9696 /* ANTest.proto in Resources */,
 				227DF2541B5E0BE700DC3D59 /* LaunchScreen.xib in Resources */,
 				227DF2511B5E0BE700DC3D59 /* Images.xcassets in Resources */,
 			);
@@ -531,6 +540,7 @@
 				227E52B81B6B021B004A9696 /* Wrappers.pbobjc.m in Sources */,
 				227E52C31B6B021B004A9696 /* GPBUnknownFieldSet.m in Sources */,
 				227E52C41B6B021B004A9696 /* GPBUtilities.m in Sources */,
+				227E52D61B6BD485004A9696 /* Antest.pbobjc.m in Sources */,
 				227E52B51B6B021B004A9696 /* Struct.pbobjc.m in Sources */,
 				229AD8231B5E42A800EDF5FE /* ANRequest.m in Sources */,
 				227E52681B6A20CC004A9696 /* ANResponseSerializer.m in Sources */,

@@ -29,9 +29,23 @@
         sharedInstance.operationQueue = [ANOperationQueue sharedInstance];
         [AFNetworkActivityIndicatorManager sharedManager].enabled=YES;
         [sharedInstance.reachabilityManager startMonitoring];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(networkStatusChange:)
+                                                     name:AFNetworkingReachabilityDidChangeNotification
+                                                   object:nil];
     });
     
     return sharedInstance;
+}
+
+#pragma mark - network status
+- (void)networkStatusChange:(NSNotification *)notification
+{
+    NSNumber *status = [notification.userInfo objectForKey:AFNetworkingReachabilityNotificationStatusItem];
+    if ([status integerValue] == AFNetworkReachabilityStatusReachableViaWWAN
+        || [status integerValue] == AFNetworkReachabilityStatusReachableViaWiFi) {
+        [self resumeCachedRequestWithCategory:nil];
+    }
 }
 
 /**
@@ -226,13 +240,13 @@
 }
 
 - (ANOperation *)POST:(NSString *)URLString
-                        category:(ANCategory)category
-                         context:(NSDictionary *)context
-                             tag:(NSInteger)tag
-                      parameters:(id)parameters
-                      completion:(void (^)(ANOperation *operation))completed
-                         success:(void (^)(ANOperation *operation, id responseObject))success
-                         failure:(void (^)(ANOperation *operation, NSError *error))failure
+             category:(ANCategory)category
+              context:(NSDictionary *)context
+                  tag:(NSInteger)tag
+           parameters:(id)parameters
+           completion:(void (^)(ANOperation *operation))completed
+              success:(void (^)(ANOperation *operation, id responseObject))success
+              failure:(void (^)(ANOperation *operation, NSError *error))failure
 {
     NSError *serializationError = nil;
     NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:&serializationError];
@@ -269,10 +283,10 @@
 }
 
 - (ANOperation *)POST:(NSString *)URLString
-                      parameters:(id)parameters
-                      completion:(void (^)(ANOperation *operation))completed
-                         success:(void (^)(ANOperation *operation, id responseObject))success
-                         failure:(void (^)(ANOperation *operation, NSError *error))failure
+           parameters:(id)parameters
+           completion:(void (^)(ANOperation *operation))completed
+              success:(void (^)(ANOperation *operation, id responseObject))success
+              failure:(void (^)(ANOperation *operation, NSError *error))failure
 {
     return [self POST:URLString category:DEFAULT_CATEGORY context:nil tag:0 parameters:parameters completion:^(ANOperation *operation){
         completed(operation);
@@ -284,8 +298,8 @@
 }
 
 - (ANOperation *)ANHTTPRequestOperationWithRequest:(NSURLRequest *)request
-                                                    success:(void (^)(ANOperation *operation, id responseObject))success
-                                                    failure:(void (^)(ANOperation *operation, NSError *error))failure
+                                           success:(void (^)(ANOperation *operation, id responseObject))success
+                                           failure:(void (^)(ANOperation *operation, NSError *error))failure
 {
     ANOperation *operation = [[ANOperation alloc] initWithRequest:request];
     operation.responseSerializer = self.responseSerializer;
