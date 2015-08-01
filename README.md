@@ -107,6 +107,20 @@ typedef NS_ENUM(NSInteger,ANCategory){
 };
 ```
 
+这些被缓存的网络请求在**何时被恢复执行**可以**由你来决定**。正常情况下是根据网络状况的变化来判断，即当网络恢复通畅的时候恢复执行这些缓存请求。但是当整个应用的功能模块变得较多的时候，恢复所有被缓存的请求可能对于刚刚获得的网络资源是一种占用和浪费，因此就有了`ANCategory`来区分这些缓存的网络请求都是属于什么功能模块的，当用户进入这个模块的时候才选择恢复缓存的请求，而且当请求被恢复的时候，他们会被重新加到全局的`ANOperationQueue`中去，因此恢复缓存请求的这个操作一定要先于当前模块的所有网络请求。这样就可以保证数据的同步性了。
+默认的恢复操作被添加在一个网络状态变化的监听器中:
+
+```Objective-C
+- (void)networkStatusChange:(NSNotification *)notification
+{
+    NSNumber *status = [notification.userInfo objectForKey:AFNetworkingReachabilityNotificationStatusItem];
+    if ([status integerValue] == AFNetworkReachabilityStatusReachableViaWWAN
+        || [status integerValue] == AFNetworkReachabilityStatusReachableViaWiFi) {
+        [self resumeCachedRequestWithCategory:nil];
+    }
+}
+```
+
 在**发送网络请求的操作被执行完成**后，如果网络较慢或者请求的数据较多，这个时候可能用户需要等待的时间较长，在某些不需要阻塞用户操作的使用场景下（例如发布朋友圈图文动态），`completion`的block的回调可以很好地改进这时的用户体验。在`ANOperation`被成功执行后，你可以通过`completion`返回的回调来进行你需要的本地缓存或者跳过的操作。具体的使用方式可以在测试的请求中看到。
 
 ### ANOperation
@@ -121,8 +135,99 @@ typedef NS_ENUM(NSInteger,ANCategory){
 
 ### ANOperationQueue
 
-### ANRequestSerializer
+`ANOperationQueue`是继承于`NSOperationQueue`的网络请求队列。用来作为`AFHTTPRequestOperationManager`单例的网络请求队列。这里主要是提供了一些特殊场景下的功能。例如在程序退出的时候，可能有些操作成功和失败的回调都没有收到，传输可能会被中断，因此就需要将队列中仍在执行和仍在等待被执行的操作一起缓存下来。这个类主要提供的是对网络请求队列中的请求的管理和维护:
+
+```Objective-C
+/**
+ *  根据指定的operationId从队列中取消该请求
+ *
+ *  @param operationId 操作id
+ *
+ *  @return 是否成功执行的布尔值
+ */
+- (BOOL)cancelOperationByOperationId:(NSInteger)operationId;
+
+/**
+ *  根据操作id缓存操作
+ *
+ *  @param operationId 操作id
+ *
+ *  @return 是否成功执行的布尔值
+ */
+- (BOOL)cacheOperationByOperationId:(NSInteger)operationId;
+
+/**
+ *  获取全部操作对象
+ *
+ *  @return 操作对象数组
+ */
+- (NSArray *)getAllOperations;
+
+/**
+ *  获取队列的实例
+ *
+ *  @return 队列
+ */
++ (ANOperationQueue *) sharedInstance;
+
+/**
+ *  缓存队列中的所有操作
+ *
+ *  @return 是否成功执行的布尔值
+ */
+- (BOOL)cacheAllOperation;
+
+/**
+ *  根据操作的id删除缓存的请求
+ *
+ *  @param operationId 操作id
+ */
+- (void)removeRequestByOperationId:(NSInteger)operationId;
+
+/**
+ *  取消队列中的所有操作
+ *
+ *  @return 是否成功执行的布尔值
+ */
+- (BOOL)cancelAllOperation;
+
+/**
+ *  往队列中添加请求
+ *
+ *  @param req 请求对象
+ */
+- (void)addRequest:(ANRequest *)req;
+
+```
 
 ### ANRequest
+
+`ANRequest`没有继承于任何父类。他只是请求最后被缓存下来的时候的数据类型。他的属性包括了:
+
+```Objective-C
+/**
+ *  分类
+ */
+@property(nonatomic, assign) ANCategory category;
+
+/**
+ *  特殊标识
+ */
+@property(nonatomic, assign) NSInteger tag;
+
+/**
+ *  基本网络请求操作
+ */
+@property(nonatomic, strong) ANOperation *operation;
+
+/**
+ *  扩展字典
+ */
+@property(nonatomic, strong) NSDictionary *context;
+```
+
+和`ANOperation`一样，他只是实现了几个用于序列化存储的方法。其中的context字段可以用来拓展请求需要缓存的一些信息。
+
+### ANRequestSerializer
 
 ### ANResponseSerializer
