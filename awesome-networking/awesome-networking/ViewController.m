@@ -18,13 +18,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[ANManager sharedInstance] testRequestCompletion:^{
-        NSLog(@"completed!");
-    } success:^(id object, ...) {
-        NSLog(@"success!%@",object);
-    } failure:^(NSError *error) {
-        NSLog(@"error!");
-    }];
     
     UIButton *btn = [[UIButton alloc]initWithFrame:CGRectMake((ScreenWidth - 60.0f)/2.0f, (ScreenHeight - 60.0f)/2.0f, 60.0f, 60.0f)];
     [btn setTitle:@"Push" forState:UIControlStateNormal];
@@ -37,8 +30,13 @@
 
 - (void)btnPressed:(id)sender
 {
-    NSArray *tmp = [[ANOperationQueue sharedInstance] getAllOperations];
-    NSLog(@"%@",tmp);
+    [[ANManager sharedInstance] testRequestCompletion:^{
+        NSLog(@"completed!");
+    } success:^(id object, ...) {
+        NSLog(@"success!%@",object);
+    } failure:^(NSError *error) {
+        NSLog(@"error!");
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

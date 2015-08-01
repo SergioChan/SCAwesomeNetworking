@@ -14,7 +14,7 @@
                       success:(successWithObjectBlock)success
                       failure:(failErrorBlock)failure
 {
-    NSString *test_url = @"http://****.tataufo.com/test/";
+    NSString *test_url = @"http://****.test.com/test/";
     
     Request *t_request = [[Request alloc]init];
     t_request.cmdid = (int32_t)1;
@@ -35,7 +35,7 @@
 //    file.mimetype = @"image/jpeg";
 //    file.filename = @"image.jpeg";
     
-    [self POST:test_url category:TEST_CATEGORY context:[NSDictionary dictionary] tag:1002 parameters:nil completion:^(ANOperation *operation) {
+    [self POST:test_url category:TEST_CATEGORY context:[NSDictionary dictionary] tag:1002 parameters:[t_testMessage data] completion:^(ANOperation *operation) {
         completed();
     } success:^(ANOperation *operation, id responseObject) {
         success(responseObject);

@@ -4,7 +4,7 @@ An optimized networking framework based on AFNetworking and ProtoBuffers.
 
 ## Version
 
-Beta 0.9
+Beta 1.0
 
 ## License
 
@@ -43,7 +43,7 @@ MIT License
 @interface ANManager : AFHTTPRequestOperationManager
 ```
 
-继承于`AFHTTPRequestOperationManager`，拓展了缓存请求，删除缓存中指定请求和恢复缓存请求等方法，同时覆盖了父类的基础网络请求方法。
+继承于`AFHTTPRequestOperationManager`，拓展了缓存请求，删除缓存中指定请求和恢复缓存请求等方法，同时覆盖了父类的基础网络请求方法。其中最基础的发送POST请求的方法如下:
 
 ```Objective-C
 /**
@@ -102,7 +102,7 @@ MIT License
 }
 ```
 
-你可以根据需要或者业务场景来确定什么样的当网络请求返回什么样的error的时候选择将网络请求缓存下来。缓存请求的时候需要初始化一个`ANRequest`对象，指定这个请求的功能分类，这个功能分类的`Category`可以在全局的`ANHeader`中定义:
+你可以根据需要或者业务场景来确定什么样的当网络请求返回什么样的`error`的时候选择将网络请求缓存下来。缓存请求的时候需要初始化一个`ANRequest`对象，指定这个请求的功能分类，这个功能分类的`Category`可以在全局的`ANHeader`中定义:
 
 ```Objective-C
 typedef NS_ENUM(NSInteger,ANCategory){
@@ -165,7 +165,7 @@ typedef NS_ENUM(NSInteger,ANCategory){
 
 为了使用protoBuffer，我们必须使用自定义的请求和响应的serializer。`ANRequestSerializer`继承于`AFHTTPRequestSerializer`，对请求的Body进行序列化。对于普通的POST请求来说，父类的序列化操作就是简单地将POST传参拼接成字符串。而对于protoBuffer来说，请求的Body就是NSData，也就是二进制字节。因此在调用序列化操作函数的时候，你必须要传入正确类型的参数：
 
-```Objectiv-C
+```Objective-C
 /**
  *  重写了父类序列化request的方法，将非NSDictionary的接口通过父类的该方法返回
  *  只有类型为NSData的protoBuffer的数据需要通过子类的这个方法返回
@@ -231,3 +231,53 @@ typedef NS_ENUM(NSInteger,ANCategory){
     }
 }
 ```
+
+## Usage
+
+用法可以参考`ANManager+test`中定义的单个网络请求的示例:
+
+```Objective-C
+- (void)testRequestCompletion:(completionBlock)completed
+                      success:(successWithObjectBlock)success
+                      failure:(failErrorBlock)failure
+{
+    NSString *test_url = @"http://****.test.com/test/";
+    
+    Request *t_request = [[Request alloc]init];
+    t_request.cmdid = (int32_t)1;
+    t_request.timestamp = (int64_t)[[NSDate date] timeIntervalSince1970];
+    
+    testMessage *t_testMessage = [[testMessage alloc]init];
+    t_testMessage.content = @"Hello world!";
+    t_testMessage.common = t_request;
+    
+    testMessageWithImage *t_testMessageWithImage = [[testMessageWithImage alloc]init];
+    t_testMessageWithImage.common = t_request;
+    t_testMessageWithImage.content = @"Hello world!";
+//    t_testMessageWithImage.imagesArray为一个ANFile对象的数组,ANFile由如下代码初始化
+    
+//    UIImage *image = [UIImage imageNamed:@"test"];
+//    ANFile *file = [[ANFile alloc]init];
+//    file.content = UIImageJPEGRepresentation(image, 0.3);
+//    file.mimetype = @"image/jpeg";
+//    file.filename = @"image.jpeg";
+    
+    [self POST:test_url category:TEST_CATEGORY context:[NSDictionary dictionary] tag:1002 parameters:[t_testMessage data] completion:^(ANOperation *operation) {
+        completed();
+    } success:^(ANOperation *operation, id responseObject) {
+        success(responseObject);
+    } failure:^(ANOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+```
+
+其中示范了简单的带图片和不带图片的protoBuffer对象的构建和传参。你可以在外层捕获到三种情况的回调：
+
+* 操作完成，请求发出
+* 请求成功获得返回数据
+* 请求由于本地错误或Http错误返回失败
+
+## Thanks
+
+如果您觉得这个库对你会有帮助，哪怕是一点点的启发，留下个Star，我也会十分感谢的！
