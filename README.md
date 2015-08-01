@@ -43,7 +43,7 @@ MIT License
 @interface ANManager : AFHTTPRequestOperationManager
 ```
 
-继承于`AFHTTPRequestOperationManager`，拓展了缓存请求，删除缓存中指定请求和恢复缓存请求等方法，同时覆盖了父类的基础网络请求方法。其中最基础的发送POST请求的方法如下:
+继承于`AFHTTPRequestOperationManager`，拓展了缓存请求，删除缓存中指定请求和恢复缓存请求等方法，同时新增了一个基础网络请求方法。其中最基础的发送POST请求的方法如下:
 
 ```Objective-C
 /**
@@ -102,7 +102,7 @@ MIT License
 }
 ```
 
-你可以根据需要或者业务场景来确定什么样的当网络请求返回什么样的`error`的时候选择将网络请求缓存下来。缓存请求的时候需要初始化一个`ANRequest`对象，指定这个请求的功能分类，这个功能分类的`Category`可以在全局的`ANHeader`中定义:
+你可以根据需要或者业务场景来确定当网络请求返回什么样的`error`的时候选择将网络请求缓存下来。缓存请求的时候需要初始化一个`ANRequest`对象，指定这个请求的功能分类，这个功能分类的`Category`可以在全局的`ANHeader`中定义:
 
 ```Objective-C
 typedef NS_ENUM(NSInteger,ANCategory){
