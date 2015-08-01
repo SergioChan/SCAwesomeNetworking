@@ -1,19 +1,24 @@
 # Awesome-Networking
+
 An optimized networking framework based on AFNetworking and ProtoBuffers.
 
 ## Version
+
 Beta 0.9
 
 ## License
+
 MIT License
 
 ## Basic Library
+
 本拓展库用到了以下两个第三方框架作为底层支持：
 
 * google/protoBuf
 * AFNetworking
 
 ## Brief Introduction
+
 这个网络拓展库的基本机制来自于微信朋友圈的网络请求机制。我们可以通过Charles抓包分析朋友圈各个操作过后的请求，基本表现出:
 
 * 所有网络失败的请求都会在网络恢复的时候优先于当前页面的网络请求恢复进行
@@ -33,6 +38,7 @@ MIT License
 * √ 引入protoBuffer，继承serializers做请求和响应的序列化
 
 ### ANManager
+
 继承于`AFHTTPRequestOperationManager`，拓展了缓存请求，删除缓存中指定请求和恢复缓存请求等方法，同时覆盖了父类的基础网络请求方法。
 
 ```Objective-C
@@ -92,3 +98,30 @@ MIT License
     return t_operation;
 }
 ```
+
+你可以根据需要或者业务场景来确定什么样的当网络请求返回什么样的error的时候选择将网络请求缓存下来。缓存请求的时候需要初始化一个`ANRequest`对象，指定这个请求的功能分类，这个功能分类的`Category`可以在全局的`ANHeader`中定义:
+
+```Objective-C
+typedef NS_ENUM(NSInteger,ANCategory){
+    DEFAULT_CATEGORY = 0,
+    TEST_CATEGORY,
+};
+```
+
+### ANOperation
+
+`ANOperation`是继承于`AFHTTPRequestOperation`的网络请求操作对象。这里主要是加上了主键和时间戳的属性，并重写了初始化的方法。因为请求的缓存用到了`NSKeyedArchiver`来序列化对象并缓存，因此子类也重写了这三个方法来实现序列化存储。同样的在他的上层`ANRequest`类中也实现了这三个方法。
+
+```Objective-C
+- (id)initWithCoder:(NSCoder *)decoder;
+- (void)encodeWithCoder:(NSCoder *)coder;
+- (id)copyWithZone:(NSZone *)zone;
+```
+
+### ANOperationQueue
+
+### ANRequestSerializer
+
+### ANRequest
+
+### ANResponseSerializer
