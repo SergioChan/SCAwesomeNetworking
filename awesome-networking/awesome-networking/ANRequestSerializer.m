@@ -25,7 +25,7 @@
                                         error:(NSError *__autoreleasing *)error
 {
     NSParameterAssert(request);
-    if(parameters == nil)
+    if(!parameters)
     {
         return [super requestBySerializingRequest:request withParameters:parameters error:error];
     }

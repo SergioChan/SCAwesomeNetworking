@@ -39,6 +39,10 @@ MIT License
 
 ### ANManager
 
+```Objective-C
+@interface ANManager : AFHTTPRequestOperationManager
+```
+
 继承于`AFHTTPRequestOperationManager`，拓展了缓存请求，删除缓存中指定请求和恢复缓存请求等方法，同时覆盖了父类的基础网络请求方法。
 
 ```Objective-C
@@ -125,6 +129,10 @@ typedef NS_ENUM(NSInteger,ANCategory){
 
 ### ANOperation
 
+```Objective-C
+@interface ANOperation : AFHTTPRequestOperation
+```
+
 `ANOperation`是继承于`AFHTTPRequestOperation`的网络请求操作对象。这里主要是加上了主键和时间戳的属性，并重写了初始化的方法。因为请求的缓存用到了`NSKeyedArchiver`来序列化对象并缓存，因此子类也重写了这三个方法来实现序列化存储。同样的在他的上层`ANRequest`类中也实现了这三个方法。
 
 ```Objective-C
@@ -135,99 +143,91 @@ typedef NS_ENUM(NSInteger,ANCategory){
 
 ### ANOperationQueue
 
-`ANOperationQueue`是继承于`NSOperationQueue`的网络请求队列。用来作为`AFHTTPRequestOperationManager`单例的网络请求队列。这里主要是提供了一些特殊场景下的功能。例如在程序退出的时候，可能有些操作成功和失败的回调都没有收到，传输可能会被中断，因此就需要将队列中仍在执行和仍在等待被执行的操作一起缓存下来。这个类主要提供的是对网络请求队列中的请求的管理和维护:
-
 ```Objective-C
-/**
- *  根据指定的operationId从队列中取消该请求
- *
- *  @param operationId 操作id
- *
- *  @return 是否成功执行的布尔值
- */
-- (BOOL)cancelOperationByOperationId:(NSInteger)operationId;
-
-/**
- *  根据操作id缓存操作
- *
- *  @param operationId 操作id
- *
- *  @return 是否成功执行的布尔值
- */
-- (BOOL)cacheOperationByOperationId:(NSInteger)operationId;
-
-/**
- *  获取全部操作对象
- *
- *  @return 操作对象数组
- */
-- (NSArray *)getAllOperations;
-
-/**
- *  获取队列的实例
- *
- *  @return 队列
- */
-+ (ANOperationQueue *) sharedInstance;
-
-/**
- *  缓存队列中的所有操作
- *
- *  @return 是否成功执行的布尔值
- */
-- (BOOL)cacheAllOperation;
-
-/**
- *  根据操作的id删除缓存的请求
- *
- *  @param operationId 操作id
- */
-- (void)removeRequestByOperationId:(NSInteger)operationId;
-
-/**
- *  取消队列中的所有操作
- *
- *  @return 是否成功执行的布尔值
- */
-- (BOOL)cancelAllOperation;
-
-/**
- *  往队列中添加请求
- *
- *  @param req 请求对象
- */
-- (void)addRequest:(ANRequest *)req;
-
+@interface ANOperationQueue : NSOperationQueue
 ```
+
+`ANOperationQueue`是继承于`NSOperationQueue`的网络请求队列。用来作为`AFHTTPRequestOperationManager`单例的网络请求队列。这里主要是提供了一些特殊场景下的功能。例如在程序退出的时候，可能有些操作成功和失败的回调都没有收到，传输可能会被中断，因此就需要将队列中仍在执行和仍在等待被执行的操作一起缓存下来。这个类主要提供的是对网络请求队列中的请求的管理和维护。
 
 ### ANRequest
 
-`ANRequest`没有继承于任何父类。他只是请求最后被缓存下来的时候的数据类型。他的属性包括了:
-
 ```Objective-C
-/**
- *  分类
- */
-@property(nonatomic, assign) ANCategory category;
-
-/**
- *  特殊标识
- */
-@property(nonatomic, assign) NSInteger tag;
-
-/**
- *  基本网络请求操作
- */
-@property(nonatomic, strong) ANOperation *operation;
-
-/**
- *  扩展字典
- */
-@property(nonatomic, strong) NSDictionary *context;
+@interface ANRequest : NSObject
 ```
 
-和`ANOperation`一样，他只是实现了几个用于序列化存储的方法。其中的context字段可以用来拓展请求需要缓存的一些信息。
+`ANRequest`没有继承于任何父类。他只是请求最后被缓存下来的时候的数据类型。和`ANOperation`一样，他只是实现了几个用于序列化存储的方法。其中的`context`字段可以用来拓展请求需要缓存的一些信息。
 
 ### ANRequestSerializer
 
+```Objective-C
+@interface ANRequestSerializer : AFHTTPRequestSerializer
+```
+
+为了使用protoBuffer，我们必须使用自定义的请求和响应的serializer。`ANRequestSerializer`继承于`AFHTTPRequestSerializer`，对请求的Body进行序列化。对于普通的POST请求来说，父类的序列化操作就是简单地将POST传参拼接成字符串。而对于protoBuffer来说，请求的Body就是NSData，也就是二进制字节。因此在调用序列化操作函数的时候，你必须要传入正确类型的参数：
+
+```Objectiv-C
+/**
+ *  重写了父类序列化request的方法，将非NSDictionary的接口通过父类的该方法返回
+ *  只有类型为NSData的protoBuffer的数据需要通过子类的这个方法返回
+ *
+ *  @param request    请求
+ *  @param parameters 需要序列化的BODY数据
+ *  @param error      错误
+ *
+ *  @return 序列化之后的请求
+ */
+- (NSURLRequest *)requestBySerializingRequest:(NSURLRequest *)request
+                               withParameters:(id)parameters
+                                        error:(NSError *__autoreleasing *)error
+{
+    NSParameterAssert(request);
+    if(!parameters)
+    {
+        return [super requestBySerializingRequest:request withParameters:parameters error:error];
+    }
+    else
+    {
+        if([parameters isKindOfClass:[NSDictionary class]])
+        {
+            return [super requestBySerializingRequest:request withParameters:parameters error:error];
+        }
+        else
+        {
+            NSMutableURLRequest *mutableRequest = [request mutableCopy];
+            
+            [self.HTTPRequestHeaders enumerateKeysAndObjectsUsingBlock:^(id field, id value, BOOL * __unused stop) {
+                if (![request valueForHTTPHeaderField:field]) {
+                    [mutableRequest setValue:value forHTTPHeaderField:field];
+                }
+            }];
+            [mutableRequest setHTTPBody:parameters];
+            return mutableRequest;
+        }
+    }
+}
+```
+
 ### ANResponseSerializer
+
+```Objective-C
+@interface ANResponseSerializer : AFHTTPResponseSerializer
+```
+
+`ANResponseSerializer`继承于`AFHTTPResponseSerializer`，由于需要解析返回的响应数据，所以将AFNetworking自带的JSON解析器作为默认解析，而根据返回响应头中的`content-type`来判断是否是符合protoBuffer的返回体。因此在构建与Awesome-Networking相配合的后端的时候，返回的响应头中需要将`content-type`设置为`application/octet-stream`。当然，如果您已经有成熟后端的话，这个地方也可以**留给你自定义**根据你已有后端的返回数据所对应的解析操作。
+
+```Objective-C
+- (id)responseObjectForResponse:(NSURLResponse *)response
+                           data:(NSData *)data
+                          error:(NSError *__autoreleasing *)error
+{
+#pragma - 根据response获得的content-type决定返回的是经过json序列化后的data还是protobuf的data，可以拓展
+    if([response.MIMEType isEqualToString:@"application/octet-stream"])
+    {
+        return data;
+    }
+    else
+    {
+        return [self JSONresponseObjectForResponse:response data:data error:error];
+    }
+}
+```
