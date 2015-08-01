@@ -90,11 +90,10 @@ MIT License
     tmp.context = context;
     tmp.tag = tag;
     
-    completed(t_operation);
-    
     [(ANOperationQueue *)self.operationQueue addRequest:tmp];
     [(ANOperationQueue *)self.operationQueue addOperation:t_operation];
     
+    completed(t_operation);
     return t_operation;
 }
 ```
@@ -107,6 +106,8 @@ typedef NS_ENUM(NSInteger,ANCategory){
     TEST_CATEGORY,
 };
 ```
+
+在**发送网络请求的操作被执行完成**后，如果网络较慢或者请求的数据较多，这个时候可能用户需要等待的时间较长，在某些不需要阻塞用户操作的使用场景下（例如发布朋友圈图文动态），`completion`的block的回调可以很好地改进这时的用户体验。在`ANOperation`被成功执行后，你可以通过`completion`返回的回调来进行你需要的本地缓存或者跳过的操作。具体的使用方式可以在测试的请求中看到。
 
 ### ANOperation
 

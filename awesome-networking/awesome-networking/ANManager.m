@@ -274,11 +274,10 @@
     tmp.context = context;
     tmp.tag = tag;
     
-    completed(t_operation);
-    
     [(ANOperationQueue *)self.operationQueue addRequest:tmp];
     [(ANOperationQueue *)self.operationQueue addOperation:t_operation];
     
+    completed(t_operation);
     return t_operation;
 }
 
